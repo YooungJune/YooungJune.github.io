@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngjune.cn","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JPL历表使用本来是球面天文学的作业，不过感觉挺有意思，于是打算发出来。 JPL历表介绍JPL，指的是 Jet Propulsion Laboratory。喷气推进实验室。DE，指的是 Development Ephemeris，星历。使用较为广泛的为DE405，儒略历范围为2305424.5至2525008.5，即为公历1599.12. 09至2201.2.20。包含了八大行星及太阳、月亮、冥王">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jpl星表">
+<meta property="og:url" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/index.html">
+<meta property="og:site_name" content="YoungJune">
+<meta property="og:description" content="JPL历表使用本来是球面天文学的作业，不过感觉挺有意思，于是打算发出来。 JPL历表介绍JPL，指的是 Jet Propulsion Laboratory。喷气推进实验室。DE，指的是 Development Ephemeris，星历。使用较为广泛的为DE405，儒略历范围为2305424.5至2525008.5，即为公历1599.12. 09至2201.2.20。包含了八大行星及太阳、月亮、冥王">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411113756556.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411113935507.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411121011409.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411121623828.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411131812724.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411123416524.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412192818081.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412193304657.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412194401777.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412195527864.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412220331952.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412215843026.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412220749944.png">
+<meta property="og:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200412222207609.png">
+<meta property="article:published_time" content="2020-04-16T13:55:41.000Z">
+<meta property="article:modified_time" content="2020-04-16T14:07:03.762Z">
+<meta property="article:author" content="YoungJune">
+<meta property="article:tag" content="jpl">
+<meta property="article:tag" content="球面天文">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/image-20200411113756556.png">
+
+<link rel="canonical" href="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>jpl星表 | YoungJune</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YoungJune</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Play for Fun</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://youngjune.cn/2020/04/16/jpl%E6%98%9F%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="YoungJune">
+      <meta itemprop="description" content="兴趣使然">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YoungJune">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jpl星表
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-16 21:55:41 / 修改时间：22:07:03" itemprop="dateCreated datePublished" datetime="2020-04-16T21:55:41+08:00">2020-04-16</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/04/16/jpl%E6%98%9F%E8%A1%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/16/jpl%E6%98%9F%E8%A1%A8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="JPL历表使用"><a href="#JPL历表使用" class="headerlink" title="JPL历表使用"></a>JPL历表使用</h1><p>本来是球面天文学的作业，不过感觉挺有意思，于是打算发出来。</p>
+<h1 id="JPL历表介绍"><a href="#JPL历表介绍" class="headerlink" title="JPL历表介绍"></a>JPL历表介绍</h1><p>JPL，指的是 Jet Propulsion Laboratory。喷气推进实验室。DE，指的是 Development Ephemeris，星历。使用较为广泛的为DE405，儒略历范围为2305424.5至2525008.5，即为公历1599.12. 09至2201.2.20。包含了八大行星及太阳、月亮、冥王星、日地质心、地月质心、平动章动，可选择为质心或目标从而得出数据。<a id="more"></a> </p>
+<h1 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h1><h2 id="1-ftp-使用"><a href="#1-ftp-使用" class="headerlink" title="1.ftp 使用"></a>1.ftp 使用</h2><p>以Linux系统为例，首先通过open命令连接到ssd.jpl.nasa.gov，采用anonymous匿名登陆。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ftp</span><br><span class="line">ftp&gt; open ssd.jpl.nasa.gov</span><br></pre></td></tr></table></figure>
+<p><img src="image-20200411113756556.png" alt="image-20200411113756556"></p>
+<p>通过cd与ls命令移动至</p>
+<p>/pub/eph/planets路径下</p>
+<p><img src="image-20200411113935507.png" alt="image-20200411113935507"></p>
+<p>本次实践采用de405星表与Fortran语言，需要的文件路径为：</p>
+<ul>
+<li>/pub/eph/planets/ascii/de405</li>
+<li>/pub/eph/planets/fortran</li>
+</ul>
+<p>采用get或mget命令将其下载至本地。</p>
+<h2 id="2-历表制作"><a href="#2-历表制作" class="headerlink" title="2.历表制作"></a>2.历表制作</h2><p>以Linux系统为例，将下载的de405中的文件合并，每一个ascp文件代表20年的星表数据，例如ascp2000.405为2000年至2020年的数据。</p>
+<p>首先尝试制作2000-2040年星表。</p>
+<p>将header.405放在前，生成合并ascii文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat header.405 ascp2000.405 ascp2020.405 &gt;  jpleph00-40</span><br></pre></td></tr></table></figure>
+<p>需要对fortran文件夹下asc2eph.f进行编辑，确认NRECL值。用vi编辑器打开。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi asc2eph.f</span><br></pre></td></tr></table></figure>
+<p>到文件74、75行，按 i 进入编辑模式，</p>
+<p>将其中一项句首用于注释的c删除</p>
+<p><img src="image-20200411121011409.png" alt="image-20200411121011409"></p>
+<p>然后按Esc退出编辑模式，</p>
+<p>依次输入冒号，wq，enter保存退出。</p>
+<p>编译asc2eph.f文件，可通过-o选项指定生成文件名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gfortran asc2eph.f -o asc2eph</span><br></pre></td></tr></table></figure>
+<p>将先前生成的生成的文件jpleph00-40用其打开：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./asc2eph &lt;  jpleph00-40</span><br></pre></td></tr></table></figure>
+<p>若正常则会返回常数与历表年份等值。</p>
+<p><img src="image-20200411121623828.png" alt="image-20200411121623828"></p>
+<p>即可发现文件夹下生成了历表文件JPLEPH。</p>
+<p>若该过程发生了错误，可能是是NRECL参数设置错误，将其更改后再次重复上述步骤。</p>
+<p>Windows系统下过程差别不大，生成制作部分为使用copy命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy header.405+ascp2000.405+ascp2020.405 &gt;  jpleph00-40</span><br></pre></td></tr></table></figure>
+<h2 id="3-历表测试"><a href="#3-历表测试" class="headerlink" title="3.历表测试"></a>3.历表测试</h2><p>下载文件中/fortran/testeph.f中包含了许多实用的子程序，可将其单独分离出来保存。</p>
+<p>首先对testeph.f中未输入的参数进行补全，分别为251、316、388、417行，</p>
+<p>前三项为FSIZER1、FSIZER2、FSIZER3的NRECL参数，推荐填写与先前asc2eph.f一样的数值。</p>
+<p>417行处填写与采用的星表有关，对于de405填写2036</p>
+<p>此外，在939-941行，选择FSIZER三种其中一项，通常Linux采用2，其余采用3。将句首C删除即可。保存。</p>
+<p><img src="image-20200411131812724.png" alt="image-20200411131812724"></p>
+<p>打开testeph.f文件，219行后为子程序即SUBROUTINE部分，将其单独保存，取名为jplsub.f</p>
+<p><img src="image-20200411123416524.png" alt="image-20200411123416524"></p>
+<p>将前面部分保存命名为testeph.f</p>
+<p>随后对其进行测试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gfortran testeph.f jplsubs.f -o <span class="built_in">test</span></span><br><span class="line">$ ./<span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>若能读出天文常数则运行成功。</p>
+<p>若出现错误，尝试修改CALL FSIZER的选择，或者检查NAMFIL一项是否路径正确的指向了JPLEPH文件。</p>
+<p>在接下来的操作中，只需自己编写fortran文件，CALL命令调用PLEPH，由userguide.txt文件可知，通过输入儒略历时间，参考系中心，目标天体，则可返回目标天体的三维位置与速度共六个值。</p>
+<p>例如编写了venus.f文件后，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gfortran venus.f jplsubs.f -o venus</span><br><span class="line">$ ./venus</span><br></pre></td></tr></table></figure>
+<p>则可返回结果。</p>
+<h2 id="4-金星凌日计算"><a href="#4-金星凌日计算" class="headerlink" title="4.金星凌日计算"></a>4.金星凌日计算</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>以地球为中心，得出同一时刻太阳与金星坐标。</p>
+<p>凌日时应该满足条件为</p>
+<ul>
+<li><p>为避免太阳遮挡金星，太阳距离为金星距离一倍以上</p>
+</li>
+<li><p>由于太阳视直径约为0.5度，两者间角距离小于0.25度</p>
+<p>由于为弧度制，所以设定为0.0045</p>
+</li>
+</ul>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>限定时间为2000.1.1至2013.1.1</p>
+<p>代码如下</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">Intrinsic</span> <span class="built_in">SQRT</span>,<span class="built_in">Acos</span></span><br><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> ET</span><br><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> R1(<span class="number">6</span>),R2(<span class="number">6</span>)</span><br><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> AdotB,A,A2,B,B2,<span class="built_in">cos</span>,theta,DX</span><br><span class="line"></span><br><span class="line">        ET=<span class="number">2451545.25</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">DO</span> <span class="number">10</span> <span class="keyword">WHILE</span> (ET.LE<span class="number">.2456293</span>)</span><br><span class="line">        <span class="keyword">CALL</span> PLEPH(ET,<span class="number">11</span>,<span class="number">3</span>,R1)</span><br><span class="line">        <span class="keyword">CALL</span> PLEPH(ET,<span class="number">2</span>,<span class="number">3</span>,R2)</span><br><span class="line">C       distance</span><br><span class="line">        DX=R1(<span class="number">1</span>)/R2(<span class="number">1</span>)</span><br><span class="line">C       theta</span><br><span class="line">        AdotB=R1(<span class="number">1</span>)*R2(<span class="number">1</span>)+R1(<span class="number">2</span>)*R2(<span class="number">2</span>)+R1(<span class="number">3</span>)*R2(<span class="number">3</span>)</span><br><span class="line">        A2=R1(<span class="number">1</span>)*R1(<span class="number">1</span>)+R1(<span class="number">2</span>)*R1(<span class="number">2</span>)+R1(<span class="number">3</span>)*R1(<span class="number">3</span>)</span><br><span class="line">        B2=R2(<span class="number">1</span>)*R2(<span class="number">1</span>)+R2(<span class="number">2</span>)*R2(<span class="number">2</span>)+R2(<span class="number">3</span>)*R2(<span class="number">3</span>)</span><br><span class="line">        A=<span class="built_in">SQRT</span>(A2)</span><br><span class="line">        B=<span class="built_in">SQRT</span>(B2)</span><br><span class="line">        <span class="built_in">cos</span>=AdotB/A/B</span><br><span class="line">        theta=<span class="built_in">ACOS</span>(<span class="built_in">cos</span>)</span><br><span class="line">        <span class="keyword">IF</span>(DX.GE<span class="number">.1.</span>AND.theta.LE<span class="number">.0.</span><span class="number">0045</span>) <span class="keyword">THEN</span></span><br><span class="line">        <span class="built_in">WRITE</span>(*,*)DX,theta,ET</span><br><span class="line">        <span class="keyword">ENDIF</span></span><br><span class="line">        ET=ET+<span class="number">0.01</span></span><br><span class="line"><span class="number">10</span>      <span class="keyword">CONTINUE</span></span><br><span class="line">        <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>计算结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">3.5635665041421651        4.0037028893135347E-003   2453164.7500241324</span><br><span class="line">3.5182624736303185        3.0341703393880651E-003   2453164.8500241339</span><br><span class="line">3.4733753055714649        4.2455945938335900E-003   2453164.9500241354</span><br><span class="line">3.5506429408527116        4.0684626935557468E-003   2456084.4500676394</span><br><span class="line">3.5127227713096776        2.7091775434967828E-003   2456084.5500676408</span><br><span class="line">3.4750826302577646        3.7145518764713460E-003   2456084.6500676423</span><br></pre></td></tr></table></figure>
+<p>可得发生金星凌日</p>
+<p>2453164  即为2004.6.7</p>
+<p>2456084  即为2012.6.5</p>
+<h3 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h3><p>制作2000-2200星表，并在代码中修改限定时间2000.1.1至2219.12.31</p>
+<p>对代码进行了部分改进。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> BEGIN,FIN,ET</span><br><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> R1(<span class="number">6</span>),R2(<span class="number">6</span>)</span><br><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> Ls,Lv,L0,k,Rs,Rv,R0,Ra,Rb,Rc</span><br><span class="line"></span><br><span class="line">c       to show output</span><br><span class="line">          <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> DAT(<span class="number">2</span>,<span class="number">20</span>)</span><br><span class="line">          INTEGERAL  DATX,DATY,i</span><br><span class="line">          INTEGERAL symold,sym</span><br><span class="line"></span><br><span class="line">        BEGIN=<span class="number">2451545.25</span></span><br><span class="line">          FIN=<span class="number">2524593</span></span><br><span class="line">          Rs=<span class="number">0.0046544</span></span><br><span class="line">          Rv=<span class="number">0.0000406</span></span><br><span class="line">          ET=BEGIN</span><br><span class="line">          DATX=<span class="number">1</span></span><br><span class="line">          DATY=<span class="number">1</span></span><br><span class="line">          i=<span class="number">1</span></span><br><span class="line">          symold=-<span class="number">1</span></span><br><span class="line">          sym=-<span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">DO</span> <span class="number">10</span> <span class="keyword">WHILE</span> (ET.LE.FIN)</span><br><span class="line">        <span class="keyword">CALL</span> PLEPH(ET,<span class="number">11</span>,<span class="number">3</span>,R1)</span><br><span class="line">        <span class="keyword">CALL</span> PLEPH(ET,<span class="number">2</span>,<span class="number">3</span>,R2)</span><br><span class="line">        Ls=(R1(<span class="number">1</span>)**<span class="number">2</span>+R1(<span class="number">2</span>)**<span class="number">2</span>+R1(<span class="number">3</span>)**<span class="number">2</span>)**<span class="number">0.5</span></span><br><span class="line">          Lv=(R2(<span class="number">1</span>)**<span class="number">2</span>+R2(<span class="number">2</span>)**<span class="number">2</span>+R2(<span class="number">3</span>)**<span class="number">2</span>)**<span class="number">0.5</span></span><br><span class="line">          k=Lv/Ls</span><br><span class="line">          R0=k*Rs+Rv</span><br><span class="line">          Ra=R2(<span class="number">1</span>)-k*R1(<span class="number">1</span>)</span><br><span class="line">          Rb=R2(<span class="number">2</span>)-k*R1(<span class="number">2</span>)</span><br><span class="line">          Rc=R2(<span class="number">3</span>)-k*R1(<span class="number">3</span>)</span><br><span class="line">          L0=(Ra**<span class="number">2</span>+Rb**<span class="number">2</span>+Rc**<span class="number">2</span>)**<span class="number">0.5</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">IF</span>(L0.LT.R0.AND.Ls.GT.Lv) <span class="keyword">THEN</span></span><br><span class="line">          sym=<span class="number">1</span></span><br><span class="line">          <span class="keyword">ELSE</span></span><br><span class="line">          sym=-<span class="number">1</span></span><br><span class="line">          <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line">          <span class="keyword">IF</span>(sym/symold.EQ.-<span class="number">1.</span>AND.sym.EQ<span class="number">.1</span>) <span class="keyword">THEN</span></span><br><span class="line">          DAT(<span class="built_in">int</span>(DATX),<span class="built_in">int</span>(DATY))=ET</span><br><span class="line">        DATX=<span class="number">2</span></span><br><span class="line">          symold=sym</span><br><span class="line">          <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line">          <span class="keyword">IF</span>(sym/symold.EQ.-<span class="number">1.</span>AND.sym.EQ.-<span class="number">1</span>) <span class="keyword">THEN</span></span><br><span class="line">          DAT(<span class="built_in">int</span>(DATX),<span class="built_in">int</span>(DATY))=ET</span><br><span class="line">          DATX=<span class="number">1</span></span><br><span class="line">          DATY=DATY+<span class="number">1</span></span><br><span class="line">          symold=sym</span><br><span class="line">          <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        ET=ET+<span class="number">0.05</span></span><br><span class="line"><span class="number">10</span>      <span class="keyword">CONTINUE</span></span><br><span class="line">          <span class="built_in">WRITE</span>(*,*)<span class="string">'begin JED: '</span>,BEGIN</span><br><span class="line">          <span class="built_in">WRITE</span>(*,*)<span class="string">'fin JED:  '</span>,FIN</span><br><span class="line"></span><br><span class="line"><span class="number">20</span>      <span class="keyword">IF</span> (i.LT.DATY) <span class="keyword">THEN</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">WRITE</span>(*,<span class="number">30</span>)DAT(<span class="number">1</span>,<span class="built_in">int</span>(i)),DAT(<span class="number">2</span>,<span class="built_in">int</span>(i))</span><br><span class="line"></span><br><span class="line"><span class="number">30</span>      <span class="keyword">FORMAT</span>(<span class="number">1</span>X,<span class="string">'transit begin:'</span>,<span class="number">2</span>X,F18<span class="number">.10</span>,<span class="number">5</span>X,<span class="string">'end:'</span>,<span class="number">2</span>x,F18<span class="number">.10</span>)</span><br><span class="line">          i=i+<span class="number">1</span></span><br><span class="line">          <span class="keyword">GOTO</span> <span class="number">20</span></span><br><span class="line">          <span class="keyword">END</span> <span class="keyword">IF</span></span><br><span class="line">        <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>计算结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">begin JED:    2451545.25</span><br><span class="line">fin JED:     2524593.00</span><br><span class="line">transit begin:  2453164.7299638018     end:  2453164.9699637964</span><br><span class="line">transit begin:  2456084.4398985412     end:  2456084.6898985356</span><br><span class="line">transit begin:  2494622.5190371480     end:  2494622.7190371435</span><br><span class="line">transit begin:  2497542.0789718907     end:  2497542.2689718865</span><br></pre></td></tr></table></figure>
+<p>可得下一次发生金星凌日日期：</p>
+<p>2494622  即为2117.12.10</p>
+<p>2497542  即为2125.12.8</p>
+<p>取用第三次凌日结果，用stellarium进行验证：</p>
+<p>起始时：</p>
+<p><img src="image-20200412192818081.png" alt="image-20200412192818081"></p>
+<p>结束时：</p>
+<p><img src="image-20200412193304657.png" alt="image-20200412193304657"></p>
+<p>符合精度，较为满意。</p>
+<h2 id="5-水星西大距计算"><a href="#5-水星西大距计算" class="headerlink" title="5.水星西大距计算"></a>5.水星西大距计算</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>首先利用余弦公式计算出水星与太阳间的夹角。</p>
+<script type="math/tex; mode=display">
+\vec{A}\cdot\vec{B}=|\vec{A}||\vec{B}|\cos\theta</script><p>达到水星西大距时需要同时满足条件</p>
+<ol>
+<li>角度一阶导数发生变化</li>
+<li>角度大于0.1弧度</li>
+<li>距离在保持增加</li>
+</ol>
+<p>设定从2020年3月1日开始计算，即为ET=2458910，代码如下</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">      <span class="keyword">Intrinsic</span> <span class="built_in">SQRT</span>,<span class="built_in">Acos</span></span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> ET</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> R1(<span class="number">6</span>),R2(<span class="number">6</span>)</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> AdotB,A,A2,B,B2,<span class="built_in">cos</span></span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> theta,theta_old,diff,diff_old,distance_old</span><br><span class="line">      ET=<span class="number">2458910</span></span><br><span class="line">      theta_old=<span class="number">0.0</span></span><br><span class="line">      diff=<span class="number">0.0</span></span><br><span class="line">      diff_old=<span class="number">0.0</span></span><br><span class="line">      distance_old=<span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">DO</span> <span class="number">10</span> <span class="keyword">WHILE</span> (ET.LE<span class="number">.2459073.</span><span class="number">5</span>)</span><br><span class="line">      <span class="keyword">CALL</span> PLEPH(ET,<span class="number">11</span>,<span class="number">3</span>,R1)</span><br><span class="line">      <span class="keyword">CALL</span> PLEPH(ET,<span class="number">1</span>,<span class="number">3</span>,R2)</span><br><span class="line">      AdotB=R1(<span class="number">1</span>)*R2(<span class="number">1</span>)+R1(<span class="number">2</span>)*R2(<span class="number">2</span>)+R1(<span class="number">3</span>)*R2(<span class="number">3</span>)</span><br><span class="line">      A2=R1(<span class="number">1</span>)*R1(<span class="number">1</span>)+R1(<span class="number">2</span>)*R1(<span class="number">2</span>)+R1(<span class="number">3</span>)*R1(<span class="number">3</span>)</span><br><span class="line">      B2=R2(<span class="number">1</span>)*R2(<span class="number">1</span>)+R2(<span class="number">2</span>)*R2(<span class="number">2</span>)+R2(<span class="number">3</span>)*R2(<span class="number">3</span>)</span><br><span class="line">      A=<span class="built_in">SQRT</span>(A2)</span><br><span class="line">      B=<span class="built_in">SQRT</span>(B2)</span><br><span class="line">      <span class="built_in">cos</span>=AdotB/A/B</span><br><span class="line">      theta=<span class="built_in">ACOS</span>(<span class="built_in">cos</span>)</span><br><span class="line">      diff=theta-theta_old</span><br><span class="line">C     theta_diff changed and distance start increasing</span><br><span class="line">      <span class="keyword">IF</span>((diff_old/diff).lt<span class="number">.0.</span>AND.theta.ge<span class="number">.0.</span><span class="number">1</span>) <span class="keyword">THEN</span></span><br><span class="line">            <span class="keyword">IF</span> (B2.ge.distance_old) <span class="keyword">THEN</span></span><br><span class="line">            <span class="built_in">WRITE</span>(*,<span class="number">60</span>) ET</span><br><span class="line">            <span class="built_in">WRITE</span>(*,<span class="number">40</span>) R1(<span class="number">1</span>),R1(<span class="number">2</span>),R1(<span class="number">3</span>)</span><br><span class="line">            <span class="built_in">WRITE</span>(*,<span class="number">50</span>) R2(<span class="number">1</span>),R2(<span class="number">2</span>),R2(<span class="number">3</span>)</span><br><span class="line">            <span class="keyword">ENDIF</span></span><br><span class="line">      <span class="keyword">ENDIF</span></span><br><span class="line">C      <span class="built_in">WRITE</span>(*,*) diff,diff_old,ET</span><br><span class="line">      theta_old=theta</span><br><span class="line">      diff_old=diff</span><br><span class="line">      distance_old=B2</span><br><span class="line">      ET=ET+<span class="number">0.001</span></span><br><span class="line"><span class="number">10</span>    <span class="keyword">CONTINUE</span></span><br><span class="line"></span><br><span class="line"><span class="number">60</span>    <span class="keyword">FORMAT</span>(<span class="string">'JED:'</span>,<span class="number">2</span>X,F18<span class="number">.10</span>)</span><br><span class="line"><span class="number">40</span>    <span class="keyword">FORMAT</span>(<span class="string">'SUN:'</span>,<span class="number">2</span>X,F12<span class="number">.10</span>,<span class="number">1</span>X,F12<span class="number">.10</span>,<span class="number">1</span>X,F12<span class="number">.10</span>)</span><br><span class="line"><span class="number">50</span>    <span class="keyword">FORMAT</span>(<span class="string">'MER:'</span>,<span class="number">2</span>X,F12<span class="number">.10</span>,<span class="number">1</span>X,F12<span class="number">.10</span>,<span class="number">1</span>X,F12<span class="number">.10</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>运行结果为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">JED:  2458932.5830037016</span><br><span class="line">SUN:  0.9950445886 0.0578015373 0.0250509492</span><br><span class="line">MER:  0.8265519338 -.3318223690 -.1656178090</span><br><span class="line">JED:  2459053.1290234607</span><br><span class="line">SUN:  -.5076910850 0.8074487121 0.3500312031</span><br><span class="line">MER:  -.1498965712 0.7959517360 0.3068025228</span><br></pre></td></tr></table></figure>
+<p>可得第一个时间节点为</p>
+<p>2458932.5830037016  即为2020,3,24,上午10点左右</p>
+<h3 id="预测-1"><a href="#预测-1" class="headerlink" title="预测"></a>预测</h3><p>设定结束日期为：2760073</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">JED:  2458932.5899994951</span><br><span class="line">SUN:  0.9950389406 0.0579122053 0.0250989234</span><br><span class="line">MER:  0.8266901705 -.3317609634 -.1656110652</span><br><span class="line">JED:  2459053.1399968006</span><br><span class="line">SUN:  -.5078515791 0.8073627295 0.3499939346</span><br><span class="line">MER:  -.1500930060 0.7961490681 0.3069203247</span><br><span class="line">JED:  2459164.2099943180</span><br><span class="line">SUN:  -.6563769710 -.6801485087 -.2948375956</span><br><span class="line">MER:  -.8639535282 -.4644724426 -.1581085710</span><br><span class="line">JED:  2459279.9799917303</span><br><span class="line">SUN:  0.9619382343 -.2229241616 -.0966403428</span><br><span class="line">MER:  0.7072308631 -.5697382337 -.2555055400</span><br><span class="line">JED:  2459400.3299890403</span><br><span class="line">SUN:  -.2244730361 0.9098277591 0.3944067155</span><br><span class="line">MER:  0.1255387507 0.7808173528 0.2892104903</span><br><span class="line">JED:  2459512.7299865279</span><br><span class="line">SUN:  -.8458151224 -.4797423888 -.2079617342</span><br><span class="line">MER:  -.9528109038 -.2222400107 -.0593147062</span><br><span class="line">JED:  2459627.3799839653</span><br><span class="line">SUN:  0.8366239408 -.4821368972 -.2090054337</span><br><span class="line">MER:  0.5114318459 -.7649120809 -.3263575161</span><br><span class="line">JED:  2459747.1299812887</span><br><span class="line">SUN:  0.0857657159 0.9287035028 0.4025837778</span><br><span class="line">MER:  0.3836725706 0.6880497853 0.2431492146</span><br><span class="line">JED:  2459861.3899787348</span><br><span class="line">SUN:  -.9638178379 -.2413447538 -.1046173154</span><br><span class="line">MER:  -.9639799525 0.0310228476 0.0408981325</span><br><span class="line">JED:  2459974.7499762010</span><br><span class="line">SUN:  0.6298650625 -.6948439268 -.3012115158</span><br><span class="line">MER:  0.2556276282 -.8942579998 -.3689499921</span><br></pre></td></tr></table></figure>
+<p>可见每次水星西大距的间隔约为115天左右。</p>
+<h3 id="计算观测方位与时间"><a href="#计算观测方位与时间" class="headerlink" title="计算观测方位与时间"></a>计算观测方位与时间</h3><p>JPL星表采用的是ICRS，与经典赤道直角坐标系略有偏差，在此忽略不计。三维坐标xyz满足如下关系：</p>
+<script type="math/tex; mode=display">
+\rho=\sqrt{x^2+y^2+z^2}</script><script type="math/tex; mode=display">
+x=\rho\cos\delta\cos\alpha</script><script type="math/tex; mode=display">
+y=\rho\cos\delta\sin\alpha</script><script type="math/tex; mode=display">
+z=\rho\sin\delta</script><p>其中$\delta$为赤纬，$\alpha$为赤经。</p>
+<p>计算过程中会产生截断误差，在此忽略不计。参考马文章老师《球面天文学》天体出没的时刻与方位角一章，得到赤经赤纬后可以计算太阳与水星升起时的时角与方位角。</p>
+<p>需要注意的是，计算赤经赤纬应用<strong>反正弦函数</strong>，若用反余弦可能会产生正负号错误。</p>
+<p><strong>假设太阳刚刚升起时为水星最佳观测时间。</strong></p>
+<p>计算太阳升起时的时角</p>
+<script type="math/tex; mode=display">
+\cos t_s=\frac{\cos(90^\circ+16'+34')-\sin\varphi\sin\delta}{\cos\varphi\cos\delta}</script><p>$t$会有正负两个值，对应升起与落下时角。</p>
+<p>代入太阳赤经得到太阳升起时的恒星时。</p>
+<script type="math/tex; mode=display">
+S_出=\alpha_s-t_s</script><p>再代入水星赤经得到此时水星的时角。</p>
+<p>对于地平坐标与时角坐标转换有：</p>
+<script type="math/tex; mode=display">
+\begin{cases} 
+\sin z\sin A=-\cos \delta\sin t \\
+\cos z=\sin\varphi\sin\delta+\cos\varphi\cos\delta\cos t\\
+\sin Z\cos A=\cos\varphi\sin\delta-\sin\varphi\cos\delta\cos t
+\end{cases}</script><p>在此为避免代码堆在一起显示比较混乱，单独编写一个计算观测方位的代码：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> ET</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> sun(<span class="number">6</span>),mer(<span class="number">6</span>)</span><br><span class="line">C     rho--distance</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> rho_m,rho_s</span><br><span class="line">C     delta--declination/DEC</span><br><span class="line">C     alpha--right ascension/RA</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> alpha_m,delta_m,alpha_s,delta_s</span><br><span class="line">C     t--time</span><br><span class="line">C     A--direction</span><br><span class="line">C     (<span class="number">90</span>-z)--Horizon height</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> t_m,t_s,A_m,t_s_middle,z_m,sinA,cosA,tanA</span><br><span class="line">C     S--Sidereal time</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> S_time</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> PI</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> phi</span><br><span class="line">      <span class="keyword">Intrinsic</span> <span class="built_in">SQRT</span>,<span class="built_in">Acos</span>,<span class="built_in">Asin</span>,<span class="built_in">cos</span>,<span class="built_in">tan</span>,<span class="built_in">Atan</span></span><br><span class="line"></span><br><span class="line">C      <span class="built_in">WRITE</span>(*,*)<span class="string">'JED when Western Elongation?'</span></span><br><span class="line">C      READ(*,*)  ET</span><br><span class="line">C      <span class="built_in">WRITE</span>(*,*)<span class="string">'local latitude?'</span></span><br><span class="line">C      READ(*,*) phi</span><br><span class="line"></span><br><span class="line">      PI=<span class="built_in">DACOS</span>(-<span class="number">1.D0</span>)</span><br><span class="line">      ET=<span class="number">2458932.5830037016</span> </span><br><span class="line">      phi=<span class="number">40.0</span>/<span class="number">180.0</span>*PI</span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">      <span class="keyword">CALL</span> PLEPH(ET,<span class="number">11</span>,<span class="number">3</span>,sun)</span><br><span class="line">      <span class="keyword">CALL</span> PLEPH(ET,<span class="number">1</span>,<span class="number">3</span>,mer)</span><br><span class="line"></span><br><span class="line">      rho_s=<span class="built_in">SQRT</span>(sun(<span class="number">1</span>)*sun(<span class="number">1</span>)+sun(<span class="number">2</span>)*sun(<span class="number">2</span>)+sun(<span class="number">3</span>)*sun(<span class="number">3</span>))</span><br><span class="line">      rho_m=<span class="built_in">SQRT</span>(mer(<span class="number">1</span>)*mer(<span class="number">1</span>)+mer(<span class="number">2</span>)*mer(<span class="number">2</span>)+mer(<span class="number">3</span>)*mer(<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">      delta_m=<span class="built_in">Asin</span>(mer(<span class="number">3</span>)/rho_m)</span><br><span class="line">      delta_s=<span class="built_in">Asin</span>(sun(<span class="number">3</span>)/rho_s)</span><br><span class="line"></span><br><span class="line">      alpha_m=<span class="built_in">Asin</span>(mer(<span class="number">2</span>)/rho_m/<span class="built_in">cos</span>(delta_m))</span><br><span class="line">      alpha_s=<span class="built_in">Asin</span>(sun(<span class="number">2</span>)/rho_s/<span class="built_in">cos</span>(delta_s))</span><br><span class="line"></span><br><span class="line">C     avoid long sentence</span><br><span class="line">      t_s_middle=<span class="built_in">cos</span>(<span class="number">1.71624</span>)-<span class="built_in">sin</span>(phi)*<span class="built_in">sin</span>(delta_s)</span><br><span class="line">      t_s=<span class="built_in">Acos</span>(t_s_middle/(<span class="built_in">cos</span>(phi)*<span class="built_in">cos</span>(delta_s)))</span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">      S_time=alpha_s-t_s</span><br><span class="line">      t_m=S_time-alpha_m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      z_m=<span class="built_in">Acos</span>(<span class="built_in">sin</span>(phi)*<span class="built_in">sin</span>(delta_m)+<span class="built_in">cos</span>(phi)*<span class="built_in">cos</span>(delta_m)*<span class="built_in">cos</span>(t_m))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      SinA=-<span class="built_in">cos</span>(delta_m)*<span class="built_in">sin</span>(t_m)/<span class="built_in">sin</span>(z_m)</span><br><span class="line">      CosA=<span class="built_in">cos</span>(phi)*<span class="built_in">sin</span>(delta_m)-<span class="built_in">sin</span>(phi)*<span class="built_in">cos</span>(delta_m)*<span class="built_in">cos</span>(t_m)</span><br><span class="line">      tanA=SinA/cosA</span><br><span class="line">      A_m=<span class="built_in">Atan</span>(tanA)</span><br><span class="line"></span><br><span class="line">      delta_m=delta_m/PI*<span class="number">180</span></span><br><span class="line">      delta_s=delta_s/PI*<span class="number">180</span></span><br><span class="line">      alpha_m=alpha_m/PI*<span class="number">180</span></span><br><span class="line">      alpha_s=alpha_s/PI*<span class="number">180</span></span><br><span class="line">      S_time=S_time/PI*<span class="number">180</span></span><br><span class="line"></span><br><span class="line">      z_m=<span class="number">90</span>-z_m/PI*<span class="number">180</span></span><br><span class="line">      A_m=A_m/PI*<span class="number">180</span></span><br><span class="line">      t_m=t_m/PI*<span class="number">180</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">21</span>)delta_m,alpha_m</span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">22</span>)delta_s,alpha_s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">23</span>)S_time</span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">24</span>)z_m,A_m</span><br><span class="line"><span class="number">21</span>    <span class="keyword">FORMAT</span>(<span class="number">1</span>X,<span class="string">'dec_mer:'</span>,<span class="number">2</span>X,F18<span class="number">.10</span>,<span class="number">5</span>X,<span class="string">'RA_mer:'</span>,<span class="number">2</span>x,F18<span class="number">.10</span>)</span><br><span class="line"><span class="number">22</span>    <span class="keyword">FORMAT</span>(<span class="number">1</span>X,<span class="string">'dec_sun:'</span>,<span class="number">2</span>X,F18<span class="number">.10</span>,<span class="number">5</span>X,<span class="string">'RA_sun:'</span>,<span class="number">2</span>x,F18<span class="number">.10</span>)</span><br><span class="line"><span class="number">23</span>    <span class="keyword">FORMAT</span>(<span class="number">1</span>x,<span class="string">'Sidereal time:'</span>,<span class="number">2</span>X,F18<span class="number">.10</span>)</span><br><span class="line"><span class="number">24</span>    <span class="keyword">FORMAT</span>(<span class="number">1</span>X,<span class="string">'height_mer:'</span>,<span class="number">2</span>X,F18<span class="number">.10</span>,<span class="number">5</span>X,<span class="string">'direction_mer:'</span>,<span class="number">2</span>x,F18<span class="number">.10</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>可得结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dec_mer:      -10.5530223236     RA_mer:      -21.9558268510</span><br><span class="line">dec_sun:        1.4070427596     RA_sun:        3.2489640863</span><br><span class="line">Sidereal time:      -98.8653030050</span><br><span class="line">height_mer:        3.0291127999     direction_mer:      -73.5336589870</span><br></pre></td></tr></table></figure>
+<p>可得地平高度为$3^\circ17’$，方位角为$106^\circ27’$</p>
+<p>用stellarium进行验证，对齐恒星时$-98.865303$，即为$17h24m32s$左右。</p>
+<p><img src="image-20200412194401777.png" alt="image-20200412194401777"></p>
+<p>可以发现符合得很好！</p>
+<h1 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h1><p>金星凌日发生日期:</p>
+<ul>
+<li><p>2453164  即为2004.6.7</p>
+</li>
+<li><p>2456084  即为2012.6.5</p>
+</li>
+<li><p>2494622  即为2117.12.10</p>
+</li>
+<li><p>2497542  即为2125.12.8</p>
+</li>
+</ul>
+<p>最近一次水星西大距：</p>
+<ul>
+<li>2458932.583  即为北京时间2020,3,24,上午10点左右</li>
+<li>早上5：31观测时地平高度为$3^\circ17’$，方位角为$106^\circ27’$</li>
+</ul>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><h2 id="金星凌日"><a href="#金星凌日" class="headerlink" title="金星凌日"></a>金星凌日</h2><p>对于判断思路可以更加提高，觉得队友“本来无一物”的方案就很好，而且试验过后效果显著，其判断思路为：</p>
+<ol>
+<li>假设太阳保持圆面大小不变，移动到金星距离</li>
+<li>比较两圆圆心距离与圆半径之和</li>
+<li>若距离小于半径和则发生凌日</li>
+</ol>
+<h2 id="水星西大距判断"><a href="#水星西大距判断" class="headerlink" title="水星西大距判断"></a>水星西大距判断</h2><p>对于这一部分感觉思路还行，暂无改进思路</p>
+<h2 id="水星观测方位"><a href="#水星观测方位" class="headerlink" title="水星观测方位"></a>水星观测方位</h2><p>步骤的关键为确定恒星时作为标准，在这里采用了马文章老师确定太阳升时方法，此刻太阳尚未升起，如图。</p>
+<p><img src="image-20200412195527864.png" alt="image-20200412195527864"></p>
+<p>但此刻天空即将亮起，所以此刻可为适宜观测时机。</p>
+<p>对于稍有误差可能是由于星表采用的是ICRS，与经典赤道直角坐标系略有偏差，但总体符合得非常好。</p>
+<h1 id="更正-amp-思考"><a href="#更正-amp-思考" class="headerlink" title="更正&amp;思考"></a>更正&amp;思考</h1><p>在刚才提交的作业版本中，对该部分计算错误。</p>
+<p><img src="image-20200412220331952.png" alt="image-20200412220331952"></p>
+<p><img src="image-20200412215843026.png" alt="image-20200412215843026"></p>
+<p>正确值应为$1.58534$重新代入计算。可得结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dec_mer:      -10.5530223236     RA_mer:      -21.9558268510</span><br><span class="line">dec_sun:        1.4070427596     RA_sun:        3.2489640863</span><br><span class="line">Sidereal time:      -89.0205915397</span><br><span class="line">height_mer:       10.1221527576     direction_mer:      -67.2026739354</span><br></pre></td></tr></table></figure>
+<p>软件显示为：</p>
+<p><img src="image-20200412220749944.png" alt="image-20200412220749944"></p>
+<p>可见这次计算才是正确的，太阳即将升起。但是水星却因为天亮了，看不清。</p>
+<p>联系晨光始概念：</p>
+<ul>
+<li>天文晨光始： $-18^\circ$</li>
+<li>航海晨光始：$-12^\circ$</li>
+<li>民用晨光始：$-6^\circ$</li>
+</ul>
+<p>在此选用民用。</p>
+<p>所以可以采用的其他解题思路为：</p>
+<ol>
+<li><p>利用地平坐标与时角坐标变换，设太阳地平高度为$-6^\circ$，代入太阳赤纬与地理纬度，得到此时太阳时角，这里由于太阳还在地平面下，就不用考虑太阳圆面与大气作用了。</p>
+<script type="math/tex; mode=display">
+\cos z=\sin\varphi\sin\delta+\cos\varphi\cos\delta\cos t</script></li>
+<li><p>利用太阳时角与赤纬，得到此刻恒星时。</p>
+</li>
+<li><p>由此刻恒星时与水星赤纬，得到水星时角。</p>
+</li>
+<li><p>由水星时角与地平坐标时角坐标关系，得到水星此刻方位角与地平高度。</p>
+</li>
+</ol>
+<p>利用软件，</p>
+<p><img src="image-20200412222207609.png" alt="image-20200412222207609"></p>
+<p>当太阳地平高度为$-6^\circ$时，水星地平高度$10^\circ50’$，方位角$107^\circ34’$</p>
+<p>此外，还有改进的地方是需要在代码中添加计算由当地恒星时转换到当地平太阳时的部分。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/jpl/" rel="tag"># jpl</a>
+              <a href="/tags/%E7%90%83%E9%9D%A2%E5%A4%A9%E6%96%87/" rel="tag"># 球面天文</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/10/yourls/" rel="prev" title="yourls">
+      <i class="fa fa-chevron-left"></i> yourls
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JPL历表使用"><span class="nav-number">1.</span> <span class="nav-text">JPL历表使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JPL历表介绍"><span class="nav-number">2.</span> <span class="nav-text">JPL历表介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验步骤"><span class="nav-number">3.</span> <span class="nav-text">实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ftp-使用"><span class="nav-number">3.1.</span> <span class="nav-text">1.ftp 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-历表制作"><span class="nav-number">3.2.</span> <span class="nav-text">2.历表制作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-历表测试"><span class="nav-number">3.3.</span> <span class="nav-text">3.历表测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-金星凌日计算"><span class="nav-number">3.4.</span> <span class="nav-text">4.金星凌日计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.4.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">3.4.2.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预测"><span class="nav-number">3.4.3.</span> <span class="nav-text">预测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-水星西大距计算"><span class="nav-number">3.5.</span> <span class="nav-text">5.水星西大距计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-1"><span class="nav-number">3.5.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预测-1"><span class="nav-number">3.5.2.</span> <span class="nav-text">预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算观测方位与时间"><span class="nav-number">3.5.3.</span> <span class="nav-text">计算观测方位与时间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结果"><span class="nav-number">4.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考"><span class="nav-number">5.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#金星凌日"><span class="nav-number">5.1.</span> <span class="nav-text">金星凌日</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#水星西大距判断"><span class="nav-number">5.2.</span> <span class="nav-text">水星西大距判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#水星观测方位"><span class="nav-number">5.3.</span> <span class="nav-text">水星观测方位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#更正-amp-思考"><span class="nav-number">6.</span> <span class="nav-text">更正&amp;思考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="YoungJune"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">YoungJune</p>
+  <div class="site-description" itemprop="description">兴趣使然</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YoungJune</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'HANVnqm3Hk9liaFhlaoVgdkE-gzGzoHsz',
+      appKey     : 'wn5kItrC5xP7AQFywfFKeg60',
+      placeholder: "Say something",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
