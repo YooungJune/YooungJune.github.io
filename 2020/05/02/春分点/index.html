@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngjune.cn","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="春分点计算题目内容大约公元前300年，埃及天文学家将沿黄道附近的天区划分为12等份。这些天区的星座成为著名的黄道十二宫。当时，春分点位于白羊座中。利用JPL DE405历表和你所能找到的子程序(SOFA等)计算由于岁差的影响，至今春分点已经移动了多少个度？春分点现在位于哪个星座？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="春分点">
+<meta property="og:url" content="http://youngjune.cn/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/index.html">
+<meta property="og:site_name" content="YoungJune">
+<meta property="og:description" content="春分点计算题目内容大约公元前300年，埃及天文学家将沿黄道附近的天区划分为12等份。这些天区的星座成为著名的黄道十二宫。当时，春分点位于白羊座中。利用JPL DE405历表和你所能找到的子程序(SOFA等)计算由于岁差的影响，至今春分点已经移动了多少个度？春分点现在位于哪个星座？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://youngjune.cn/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/image-20200419185708375.png">
+<meta property="og:image" content="http://youngjune.cn/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/image-20200422155429064.png">
+<meta property="article:published_time" content="2020-05-02T13:49:43.000Z">
+<meta property="article:modified_time" content="2020-05-02T13:56:24.369Z">
+<meta property="article:author" content="YoungJune">
+<meta property="article:tag" content="jpl">
+<meta property="article:tag" content="球面天文">
+<meta property="article:tag" content="sofa">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://youngjune.cn/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/image-20200419185708375.png">
+
+<link rel="canonical" href="http://youngjune.cn/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>春分点 | YoungJune</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YoungJune</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Play for Fun</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://youngjune.cn/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="YoungJune">
+      <meta itemprop="description" content="兴趣使然">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YoungJune">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          春分点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-02 21:49:43 / 修改时间：21:56:24" itemprop="dateCreated datePublished" datetime="2020-05-02T21:49:43+08:00">2020-05-02</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="春分点计算"><a href="#春分点计算" class="headerlink" title="春分点计算"></a>春分点计算</h1><h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><p>大约公元前300年，埃及天文学家将沿黄道附近的天区划分为12等份。这些天区的星座成为著名的黄道十二宫。当时，春分点位于白羊座中。利用JPL DE405历表和你所能找到的子程序(SOFA等)计算由于岁差的影响，至今春分点已经移动了多少个度？春分点现在位于哪个星座？<a id="more"></a> </p>
+<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><h4 id="1-春分日计算"><a href="#1-春分日计算" class="headerlink" title="1.春分日计算"></a>1.春分日计算</h4><p>首先可以通过DE405星表，计算当太阳位于春分点时的日期。</p>
+<p>需要满足的条件：</p>
+<ul>
+<li>于地球赤道坐标系，太阳达到升交点。</li>
+<li>太阳在持续向上移动。</li>
+</ul>
+<p>代码为：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	    <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> BEGIN,FIN,ET</span><br><span class="line">        <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> R1(<span class="number">6</span>),R2(<span class="number">6</span>),z_old</span><br><span class="line"></span><br><span class="line">        BEGIN=<span class="number">2455562.542</span></span><br><span class="line">        FIN=<span class="number">2462137.542</span></span><br><span class="line">        ET=BEGIN</span><br><span class="line">        z_old=<span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">DO</span> <span class="number">10</span> <span class="keyword">WHILE</span> (ET.LE.FIN)</span><br><span class="line">        <span class="keyword">CALL</span> PLEPH(ET,<span class="number">11</span>,<span class="number">3</span>,R1)</span><br><span class="line">        <span class="keyword">if</span>( (z_old/R1(<span class="number">3</span>)).LT<span class="number">.0.</span><span class="number">0.</span>and.z_old.lt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">            <span class="built_in">WRITE</span>(*,*)ET,z_old,R1(<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">endif</span></span><br><span class="line">        ET=ET+<span class="number">0.01</span></span><br><span class="line">        z_old=R1(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="number">10</span>      <span class="keyword">CONTINUE</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>通过限定时间范围，即可得到太阳到达春分点时的日期。</p>
+<p>计算前308至前292年的春分日，与2011年至2028年的春分日。</p>
+<p>计算结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">1608611.9899908025       -3.3999288407195096E-005   3.5377153268885712E-005</span><br><span class="line">1608977.2399826385       -4.8811629154756671E-005   2.0586780108505960E-005</span><br><span class="line">1609342.4999744743       -4.0921883676155874E-006   6.5320541232686928E-005</span><br><span class="line">1609707.7499663103       -6.1865031685832701E-005   7.4995287712353517E-006</span><br><span class="line">1610073.0099581461       -4.1802221983694085E-005   2.7616098645180404E-005</span><br><span class="line">1610438.2699499819       -1.0623763719962457E-005   5.8775935470140213E-005</span><br><span class="line">1610803.5299418177       -1.6953759657526416E-005   5.2417894337343843E-005</span><br><span class="line">1611168.7899336535       -1.0441139102217840E-005   5.8987869356776491E-005</span><br><span class="line">1611534.0399254896       -4.9146797628333303E-005   2.0222776838522191E-005</span><br><span class="line">1611899.2999173254       -4.6036247410724020E-006   6.4790891506234403E-005</span><br><span class="line">1612264.5499091614       -3.4592448974239687E-005   3.4824468118202544E-005</span><br><span class="line">1612629.8099009972       -3.1802720616854320E-005   3.7555898146484148E-005</span><br><span class="line">1612995.0698928330       -4.3830828289906029E-006   6.5032845989254368E-005</span><br><span class="line">1613360.3198846690       -2.2407354122986581E-005   4.6985443897898404E-005</span><br><span class="line">1613725.5698765051       -6.6549141571116974E-005   2.8209887748438522E-006</span><br><span class="line">1614090.8298683409       -5.3450597549308887E-005   1.5965076884435613E-005</span><br><span class="line">1614456.0898601767       -2.7472387161429825E-005   4.1908243416531078E-005</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2456006.8899900671       -6.5983093608281535E-005   2.7306215941240962E-006</span><br><span class="line">2456372.1499819029       -3.2778569050337250E-005   3.5897295586351631E-005</span><br><span class="line">2456737.4099737387       -2.7174001911972460E-005   4.1500860416535091E-005</span><br><span class="line">2457102.6599655747       -5.7047658953062158E-005   1.1663753440378799E-005</span><br><span class="line">2457467.9199574105       -6.5586980976008180E-006   6.2110531179376512E-005</span><br><span class="line">2457833.1799492463       -1.2277470124118011E-005   5.6405600194949336E-005</span><br><span class="line">2458198.4299410824       -4.0258545414025623E-005   2.8447016876809866E-005</span><br><span class="line">2458563.6799329184       -4.5655607436819075E-005   2.3002170879652273E-005</span><br><span class="line">2458928.9399247542       -3.1995788808426937E-005   3.6705239046084734E-005</span><br><span class="line">2459294.1999165900       -1.1384915640931699E-006   6.7555754704712746E-005</span><br><span class="line">2459659.4599084258       -1.6811585183540987E-005   5.1847127733887534E-005</span><br><span class="line">2460024.7199002616       -1.1423865977684495E-005   5.7298462020066898E-005</span><br><span class="line">2460389.9698920976       -2.9805016120148554E-005   3.8861225291137152E-005</span><br><span class="line">2460755.2298839334       -4.9115389096446868E-005   1.9556758691496347E-005</span><br><span class="line">2461120.4898757692       -7.6090995414549410E-006   6.1103717624221184E-005</span><br><span class="line">2461485.7398676053       -1.7687958510451086E-005   5.0961600603808849E-005</span><br><span class="line">2461850.9998594411       -1.4966399308239406E-005   5.3734433104090946E-005</span><br></pre></td></tr></table></figure>
+<p>取平均日以减小章动，可得：</p>
+<p>-300年的春分日：1611534.03874 即为-300.2.21 20：32</p>
+<p>2020年的春分日：2458928.94522 即为2020.3.20 18：41</p>
+<h4 id="2-春分点移动计算"><a href="#2-春分点移动计算" class="headerlink" title="2.春分点移动计算"></a>2.春分点移动计算</h4><p> 两者儒略历相减除以365.2422余数为33天。</p>
+<p>对于-300年的春分点，应为往后延长33天。</p>
+<p>代入上次计算太阳与水星赤经赤纬的程序中，</p>
+<p>输入儒略历为$2458928.94522+33=2458961.94522$</p>
+<pre><code>得到结果：
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dec_mer:        5.3924459922     RA_mer:       17.6940456553</span><br><span class="line"> dec_sun:       12.1859336750     RA_sun:       29.8790368613</span><br><span class="line"> Sidereal time:      -71.6945635769</span><br><span class="line"> height_mer:        3.9304354293     direction_mer:       86.2638054565</span><br></pre></td></tr></table></figure>
+<p>所以春分点移动角度为：</p>
+<script type="math/tex; mode=display">
+\frac{33}{365.2422}\times360^\circ=32.529^\circ</script><p>其中赤纬移动了$12.18^\circ$，赤经移动了$1.992h$</p>
+<h4 id="3-位于星座计算"><a href="#3-位于星座计算" class="headerlink" title="3.位于星座计算"></a>3.位于星座计算</h4><p>春分点现在位于的星座即为赤经为0，也为春分日太阳背后的星座。</p>
+<p>查询星图可知为双鱼座。</p>
+<p>查询2020年春分日33天后，</p>
+<p><img src="image-20200419185708375.png" alt="image-20200419185708375"></p>
+<p>太阳位于白羊座，即为-300年春分日春分点也位于白羊座。</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>利用sofa软件包，查找所需函数，再进行处理。</p>
+<h4 id="1-安装sofa"><a href="#1-安装sofa" class="headerlink" title="1.安装sofa"></a>1.安装sofa</h4><p>首先进行sofa软件包的安装</p>
+<p>官方网址为：<a href="http://www.iausofa.org" target="_blank" rel="noopener">http://www.iausofa.org</a></p>
+<p>下载到Linux系统。</p>
+<p>到达src文件夹，编辑makefile文件，更改SOFA_LIB_DIR项确定libsofa.a文件安装路径，然后使用make命令安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ make </span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
+<p>下述语句为帮助文档00RADE.ME中示例使用方法。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ f77 myprog.f -o myprog libsofa.a</span><br></pre></td></tr></table></figure><br>但我们也可以用gfortran命令使用libsofa.a文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gfortran myprog.f -o myprog libsofa.a</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-查找所需函数"><a href="#2-查找所需函数" class="headerlink" title="2.查找所需函数"></a>2.查找所需函数</h4><p>sofa提供的手册为：<a href="http://www.iausofa.org/2019_0722_F/sofa/manual.lis" target="_blank" rel="noopener">sofa_manual.lis</a></p>
+<p>由于要解决极移与进动问题，关键词自然是Precession。</p>
+<p>在帮助文档中，我们可以发现函数LTPB，似乎能够完成目标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LTPB      long-term precession matrix, including ICRS frame bias</span><br></pre></td></tr></table></figure>
+<p>手册部分显示为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">*  Given:</span><br><span class="line">*     EPJ       d        Julian epoch (TT)</span><br><span class="line">*</span><br><span class="line">*  Returned:</span><br><span class="line">*     RPB       d        precession-bias matrix, J2000.0 to date</span><br><span class="line">*</span><br><span class="line">*  1) The matrix is in the sense</span><br><span class="line">*</span><br><span class="line">*        P_date &#x3D; RPB x P_ICRS,</span><br><span class="line">*</span><br><span class="line">*     where P_J2000 is a vector in the International Celestial Reference</span><br><span class="line">*     System, and P_date is the vector with respect to the Celestial</span><br><span class="line">*     Intermediate Reference System at that date but with nutation</span><br><span class="line">*     neglected.</span><br></pre></td></tr></table></figure>
+<p>通过给定儒略历纪元，则可返回相对于J2000.0的岁差矩阵。</p>
+<h4 id="3-计算岁差矩阵"><a href="#3-计算岁差矩阵" class="headerlink" title="3.计算岁差矩阵"></a>3.计算岁差矩阵</h4><p>代码主要就是调用LTPB函数，内容并不复杂，如下：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">PROGRAM</span></span> test</span><br><span class="line"><span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> EPJ1,EPJ2,EPJ3,RPB1(<span class="number">9</span>),RPB2(<span class="number">9</span>),RPB3(<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line">EPJ1=-<span class="number">300.0D0</span></span><br><span class="line"><span class="keyword">CALL</span> iau_LTPB(EPJ1,RPB1)</span><br><span class="line"><span class="built_in">WRITE</span>(*,*)<span class="string">"-300year"</span></span><br><span class="line"><span class="built_in">WRITE</span>(*,*)RPB1</span><br><span class="line"></span><br><span class="line">EPJ2=<span class="number">2000.0D0</span></span><br><span class="line"><span class="keyword">CALL</span> iau_LTPB(EPJ2,RPB2)</span><br><span class="line"><span class="built_in">WRITE</span>(*,*)<span class="string">"2000year"</span></span><br><span class="line"><span class="built_in">WRITE</span>(*,*)RPB2</span><br><span class="line"></span><br><span class="line">EPJ3=<span class="number">2020.0D0</span></span><br><span class="line"><span class="keyword">CALL</span> iau_LTPB(EPJ3,RPB3)</span><br><span class="line"><span class="built_in">WRITE</span>(*,*)<span class="string">"2020year"</span></span><br><span class="line"><span class="built_in">WRITE</span>(*,*)RPB3</span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>结果返回为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-300year</span><br><span class="line"> 0.84834231518016889      -0.48469456510995801      -0.21304106371221287       0.48464598076939908       0.87291027263133281       -5.6088584032453509E-002  0.21315156485193845       -5.5667176033698217E-002  0.97543199450992513     </span><br><span class="line"> </span><br><span class="line">  2000year</span><br><span class="line">  1.0000000000000000        7.0782797433127277E-008  -8.0561489398447120E-008  -7.0782797432736689E-008   1.0000000000000000       -3.3055566297944596E-008   8.0561489398790301E-008   3.3055566297944602E-008   1.0000000000000000    </span><br><span class="line">  </span><br><span class="line">   2020year</span><br><span class="line"> 0.99998811083780281        4.4723998219357011E-003   1.9431476748985419E-003  -4.4723997085619419E-003  0.99998999876071815       -4.4036364127851081E-006  -1.9431479358340182E-003  -4.2869490433633387E-006  0.99999811207708245</span><br></pre></td></tr></table></figure></p>
+<p>由于LTPB函数是以J2000作为参照点。即为：</p>
+<script type="math/tex; mode=display">
+P_{date} = RPB \times P_{ICRS}</script><p>所以有：</p>
+<script type="math/tex; mode=display">
+P_{-300} = RPB_{-300} \times P_{ICRS}\\
+P_{2020} = RPB_{2020} \times P_{ICRS}</script><p>其实2020与2000旋转矩阵偏差也不大，但这里为了确定-300年与2020年间的变化，这儿应该将$RPB_{2020}$矩阵求逆，可得</p>
+<script type="math/tex; mode=display">
+P_{-300}=RPB\times P_{2020}=RPB_{-300}\times RPB^{-1}_{2020}\times P_{2020}</script><p>代入数据再次计算，可得：</p>
+<script type="math/tex; mode=display">
+RPB=\
+       \begin{bmatrix}
+       0.84575051&-0.48848291& -0.21468704\\
+        0.48843523&  0.87073426& -0.05703396\\
+        0.21479547& -0.05662421&  0.97501621\\
+       \end{bmatrix}</script><p>即为从2020年至-300年的旋转矩阵。</p>
+<p>天体在赤道直角坐标系满足：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+x\\ y\\ z\\
+\end{pmatrix}_{\alpha,\delta}=
+\begin{pmatrix}
+\cos\delta\cos\alpha\\
+\cos\delta\sin\alpha\\
+\sin\delta\\
+\end{pmatrix}</script><p>设2020年春分点的赤经赤纬皆为0，xyz坐标即为$(1,0,0)$</p>
+<p>代入计算，则可得-300年时xyz坐标为$( 0.84575051,0.48843523,0.21479547)$</p>
+<p>从而反解出赤纬$\delta=0.21648241$，赤经$\alpha=0.52372376$。</p>
+<p>转换为合适单位可得结论：</p>
+<p>相对于-300年，如今赤纬偏移了$12.40^\circ$，赤经偏移了$2.000h$</p>
+<p>利用球面三角形相关知识，由于赤经赤纬相互垂直为$90^\circ$,</p>
+<p>余弦公式有：</p>
+<script type="math/tex; mode=display">
+\cos a =\cos b \cos c+\sin b \sin c \cos A</script><p>代入$A=90^\circ$</p>
+<p>可得$a=0.562826=32.248^{\circ}$ </p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p>用方法一所得结果为：</p>
+<p>总共移动了$32.529^\circ$</p>
+<p>其中赤纬移动了$12.18^\circ$，赤经移动了$1.992h$</p>
+<p>用方法二所得结果为：</p>
+<p>总共移动了$32.248^{\circ}$</p>
+<p>其中赤纬偏移了$12.40^\circ$，赤经偏移了$2.000h$</p>
+<h2 id="更正与反思"><a href="#更正与反思" class="headerlink" title="更正与反思"></a>更正与反思</h2><ul>
+<li>更正了上一版本中的部分错误，如图。</li>
+</ul>
+<p><img src="image-20200422155429064.png" alt="image-20200422155429064"></p>
+<ul>
+<li>添加了利用sofa进行计算的方法</li>
+</ul>
+<ul>
+<li>反思：对于方法一取平均值时应该计算前后19年的平均值更佳，因为章动周期为18.6年。</li>
+</ul>
+<ul>
+<li>最终的计算结果应该为方法二更加可信，因为在方法一时，并没有考虑2000年至2020年的变化。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/jpl/" rel="tag"># jpl</a>
+              <a href="/tags/%E7%90%83%E9%9D%A2%E5%A4%A9%E6%96%87/" rel="tag"># 球面天文</a>
+              <a href="/tags/sofa/" rel="tag"># sofa</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/16/jpl%E6%98%9F%E8%A1%A8/" rel="prev" title="jpl星表">
+      <i class="fa fa-chevron-left"></i> jpl星表
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#春分点计算"><span class="nav-number">1.</span> <span class="nav-text">春分点计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目内容"><span class="nav-number">1.1.</span> <span class="nav-text">题目内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验步骤"><span class="nav-number">1.2.</span> <span class="nav-text">实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一："><span class="nav-number">1.2.1.</span> <span class="nav-text">方法一：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-春分日计算"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">1.春分日计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-春分点移动计算"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.春分点移动计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-位于星座计算"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">3.位于星座计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二："><span class="nav-number">1.2.2.</span> <span class="nav-text">方法二：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-安装sofa"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">1.安装sofa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-查找所需函数"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.查找所需函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-计算岁差矩阵"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">3.计算岁差矩阵</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">1.3.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更正与反思"><span class="nav-number">1.4.</span> <span class="nav-text">更正与反思</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="YoungJune"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">YoungJune</p>
+  <div class="site-description" itemprop="description">兴趣使然</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YoungJune</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'HANVnqm3Hk9liaFhlaoVgdkE-gzGzoHsz',
+      appKey     : 'wn5kItrC5xP7AQFywfFKeg60',
+      placeholder: "Say something",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
