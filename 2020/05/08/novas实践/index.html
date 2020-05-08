@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngjune.cn","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于使用NOVAS进行操作的部分过程。全称为Naval Observatory Vector Astrometry Software 。可用来计算天体位置等等。下面对其运用进行例子介绍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NOVAS实践">
+<meta property="og:url" content="http://youngjune.cn/2020/05/08/novas%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="YoungJune">
+<meta property="og:description" content="关于使用NOVAS进行操作的部分过程。全称为Naval Observatory Vector Astrometry Software 。可用来计算天体位置等等。下面对其运用进行例子介绍。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-08T08:55:48.000Z">
+<meta property="article:modified_time" content="2020-05-08T09:17:30.782Z">
+<meta property="article:author" content="YoungJune">
+<meta property="article:tag" content="jpl">
+<meta property="article:tag" content="球面天文">
+<meta property="article:tag" content="NOVAS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://youngjune.cn/2020/05/08/novas%E5%AE%9E%E8%B7%B5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>NOVAS实践 | YoungJune</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YoungJune</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Play for Fun</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://youngjune.cn/2020/05/08/novas%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="YoungJune">
+      <meta itemprop="description" content="兴趣使然">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YoungJune">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NOVAS实践
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-08 16:55:48 / 修改时间：17:17:30" itemprop="dateCreated datePublished" datetime="2020-05-08T16:55:48+08:00">2020-05-08</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/05/08/novas%E5%AE%9E%E8%B7%B5/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/08/novas%E5%AE%9E%E8%B7%B5/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>关于使用NOVAS进行操作的部分过程。全称为Naval Observatory Vector Astrometry Software 。可用来计算天体位置等等。下面对其运用进行例子介绍。<br><a id="more"></a> </p>
+<h2 id="题目内容"><a href="#题目内容" class="headerlink" title="题目内容"></a>题目内容</h2><h3 id="恒星观测-题目一"><a href="#恒星观测-题目一" class="headerlink" title="恒星观测[题目一]"></a>恒星观测[题目一]</h3><p>观测时间：2020年5月1日，$23^h15^m43^s.55\mathrm{UTC}$ </p>
+<p>测站坐标：$\mathbf{W}70^\circ44’11’’.560 \quad \mathbf{S}30^\circ14’26’’.731$    参考椭球面高度$2378 \mathrm{m} $</p>
+<p>目标星体：$\mathbf{ICRS}[\alpha,\delta]=14^\circ34’16{‘’}.81183 \quad -12^\circ31’10{‘’}.3965 $</p>
+<p>恒星自行：</p>
+<script type="math/tex; mode=display">
+\mathrm{\mu_ \alpha=-354.45 mas/y  \quad \mu_ \beta=+595.35 mas/y} \notag</script><p>地球指向参数：？ 从IERS网站查询</p>
+<p>求该星的：</p>
+<ul>
+<li>地心视位置</li>
+<li>站心坐标</li>
+<li>地平坐标</li>
+</ul>
+<h3 id="系内观测-题目二"><a href="#系内观测-题目二" class="headerlink" title="系内观测[题目二]"></a>系内观测[题目二]</h3><p>观测时间：2020年5月1日，$23^h15^m43^s.55\mathrm{UTC}$ </p>
+<p>测站坐标：兴隆观测站</p>
+<p>目标星体：月球和八大行星</p>
+<p>地球指向参数：？ 从IERS网站查询</p>
+<p>求这些目标的：</p>
+<ul>
+<li>地心视位置</li>
+<li>站心坐标</li>
+<li>地平坐标，且指出哪些天体可以观测。</li>
+</ul>
+<h2 id="实验准备"><a href="#实验准备" class="headerlink" title="实验准备"></a>实验准备</h2><h3 id="查询地球指向参数"><a href="#查询地球指向参数" class="headerlink" title="查询地球指向参数"></a>查询地球指向参数</h3><p>首先访问IERS官网<a href="https://www.iers.org/IERS/EN/Home/home_node.html" target="_blank" rel="noopener">https://www.iers.org/IERS/EN/Home/home_node.html</a></p>
+<p>在其Earth orientation data项目中，由于我们所查询的日期是较近的，由此选择为Daily EOP data files.</p>
+<p>其中共有三项，</p>
+<ul>
+<li>finals.daily(IAU1980)</li>
+<li>finals.daily(IAU2000)</li>
+<li>gpsrapid.daily</li>
+</ul>
+<p>第三项为GPS所用数据，而我们需要使用的是第二项。</p>
+<p>最终可得，在2020年5月1日这一天</p>
+<p>$\mathrm{DX=0.075815[arcsec]\quad DY=0.435887[arcsec] \ UT1-UTC=-0.242517s}$ </p>
+<p>此外我们还可以查询到Leap second announcements in UTC。</p>
+<p>即为从2017.1.1至今，$\mathrm{UTC - TAI = -37\, s}$ </p>
+<h3 id="NOVAS程序包下载"><a href="#NOVAS程序包下载" class="headerlink" title="NOVAS程序包下载"></a>NOVAS程序包下载</h3><p>首先需要找到NOVAS程序包。</p>
+<p>我们可以发现好像官网坏掉了，其中，</p>
+<p><a href="http://aa.usno.navy.mil/software/novas/novas_info.php" target="_blank" rel="noopener">http://aa.usno.navy.mil/software/novas/novas_info.php</a></p>
+<p><a href="http://aa.usno.navy.mil" target="_blank" rel="noopener">http://aa.usno.navy.mil</a></p>
+<p>只要是aa开头的网址无论如何也连不上。</p>
+<p>通过朋友GasinAn指导，来到官网使用站内搜索，</p>
+<p><a href="https://www.usno.navy.mil/search?SearchableText=NOVAS" target="_blank" rel="noopener">https://www.usno.navy.mil/search?SearchableText=NOVAS</a></p>
+<p>即可在最下方找到NOVAS_FORTRAN软件包。即为</p>
+<p><a href="https://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novasf3.1.tar.Z" target="_blank" rel="noopener">https://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novasf3.1.tar.Z</a></p>
+<h3 id="NOVAS测试使用"><a href="#NOVAS测试使用" class="headerlink" title="NOVAS测试使用"></a>NOVAS测试使用</h3><p>对于下载的文件中，最重要的为：</p>
+<ul>
+<li>example.f</li>
+<li>NOVAS_F3.1.f</li>
+<li>NOVAS_F3.1_solsys2.f</li>
+</ul>
+<p>其中solsys2是利用jpl历表进行计算，因此需要使用jpl星表中的子程序。</p>
+<ul>
+<li>jplsubs.f</li>
+</ul>
+<p>此外最常用的为指导手册</p>
+<ul>
+<li>NOVAS_F3.1_Guide.pdf</li>
+</ul>
+<p>以上就是所需素材。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gfortran example.f NOVAS_F3.1.f NOVAS_F3.1_solsys2.f jplsubs.f -o example.out</span><br><span class="line">$ ./example.out</span><br></pre></td></tr></table></figure>
+<p>可得显示结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">JPL ephemeris DE405 open. Start JD &#x3D; 2451536.50  End JD &#x3D; 2525008.50</span><br><span class="line"></span><br><span class="line">NOVAS Sample Calculations</span><br><span class="line">-------------------------</span><br><span class="line"></span><br><span class="line">Geodetic location:</span><br><span class="line"> -70.0000000000          42.0000000000           0.0000000000</span><br><span class="line"></span><br><span class="line">TT and UT1 Julian Dates and Delta-T:</span><br><span class="line"> 2454580.942629         2454580.941871          65.57184500000</span><br><span class="line"></span><br><span class="line">FK6 1307 geocentric and topocentric positions:</span><br><span class="line">  11.8915509892          37.6586357955</span><br><span class="line">  11.8915479153          37.6586695456</span><br><span class="line"></span><br><span class="line">Moon geocentric and topocentric positions:</span><br><span class="line">  17.1390774264         -27.5374448869         0.002710296515</span><br><span class="line">  17.1031967646         -28.2902502967         0.002703785126</span><br><span class="line">  17.1031967646         -28.2902502967         0.002703785126</span><br><span class="line"></span><br><span class="line">Moon zenith distance and azimuth:</span><br><span class="line">  81.6891016502         219.2708903405</span><br><span class="line"></span><br><span class="line">Greenwich and local sidereal time and Earth Rotation Angle:</span><br><span class="line">   0.79362134148          20.12695467481          11.7956158462</span><br><span class="line"></span><br><span class="line">Mars heliocentric ecliptic longitude and latitude and radius vector:</span><br><span class="line"> 148.0032235906           1.8288284075         1.664218258879</span><br><span class="line"></span><br><span class="line">Direction of zenith vector (RA &amp; Dec) in GCRS:</span><br><span class="line">  20.1221838608          41.9769823554</span><br></pre></td></tr></table></figure>
+<p>如上所述，即为测试成功。</p>
+<h2 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a>示例程序</h2><p>实际上，通过阅读示例程序，可以发现已经写得很好，我们所做的就是改改参数就行了。由于我做这个实践时是用的3.0版本，由此以3.0版本为例的sample.f进行说明，并将其完整代码放在文末。</p>
+<h3 id="建立时间参数"><a href="#建立时间参数" class="headerlink" title="建立时间参数"></a>建立时间参数</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">*     ESTABLISH TIME ARGUMENTS</span><br><span class="line">      <span class="keyword">CALL</span> JULDAT  ( IYEAR, MONTH, IDAY, HOUR,   UTCJD )</span><br><span class="line">      TTJD = UTCJD + ( LEAPS + <span class="number">32.184D0</span> ) / <span class="number">86400.D0</span></span><br><span class="line">	  UT1JD = UTCJD + UT1UTC / <span class="number">86400.D0</span></span><br><span class="line">	  DELTAT = <span class="number">32.184D0</span> + LEAPS - UT1UTC</span><br><span class="line">	  <span class="keyword">CALL</span> SETDT ( DELTAT )</span><br><span class="line">	  <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'TT and UT1 Julian Dates and Delta-T: '</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9020</span> ) TTJD, UT1JD, DELTAT</span><br></pre></td></tr></table></figure>
+<p>这一部分对时间进行修正，最开始输入的时间为正常的公历。</p>
+<p>通过使用JULDAT获得此刻UTC。</p>
+<p>且有：</p>
+<script type="math/tex; mode=display">
+\mathrm{TT-TAI=32.184\, s \quad UTC - TAI = -37\, s}</script><p>由于刚查询到$\mathrm{UTC - TAI = -37\, s}$ 。对应此处LEAPS即为$\mathrm{37\, s}$</p>
+<p>再有先前查询的$\mathrm{UT1-UTC=-0.242517s}$</p>
+<p>此处便可得到UT1，TT二者时间。这也是后面所主要用的。</p>
+<h3 id="恒星测量"><a href="#恒星测量" class="headerlink" title="恒星测量"></a>恒星测量</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">*     APPARENT AND TOPOCENTRIC PLACE OF STAR FK6 <span class="number">1307</span> = GRB <span class="number">1830</span></span><br><span class="line">      RA2000 = <span class="number">11.88299133D0</span></span><br><span class="line">      DC2000 = <span class="number">37.71867646D0</span></span><br><span class="line">      PMRA   =  <span class="number">4003.27D0</span></span><br><span class="line">      PMDEC  = -<span class="number">5815.07D0</span></span><br><span class="line">      PARX   =   <span class="number">109.21D0</span></span><br><span class="line">      RV     =   -<span class="number">98.8D0</span></span><br><span class="line">      <span class="keyword">CALL</span> APSTAR ( TTJD, IEARTH, RA2000, DC2000, PMRA, PMDEC, PARX, RV,</span><br><span class="line">     .     RA, DEC )</span><br><span class="line">      <span class="keyword">CALL</span> TPSTAR ( UT1JD, GLON, GLAT, HT,   RAT, DECT )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'FK6 1307 geocentric and topocentric positions:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) RA, DEC</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) RAT, DECT</span><br></pre></td></tr></table></figure>
+<p>APSTAR为测量恒星的视位置，TPSTAR为测量恒星的站心位置。</p>
+<p>视位置为在地心观测，没有大气的情况时的天体位置。对应的是真春分点、真赤道。</p>
+<p>站心位置于站心观测，没有大气的情况时的天体位置。对应的是真春分点、真赤道。</p>
+<p>两者差别仅为观测点所在地。</p>
+<p>对于视位置测量，所需为J2000时赤经赤纬、自行、视差、视向速度。最终返回视位置赤经赤纬。</p>
+<p>TPSTAR在紧接着APSTAR后面调用时，会利用先前的的相同数据，且需要提供观测站地理赤经赤纬与高度。最终返回站心位置赤经赤纬。</p>
+<p>因此，在处理自己的问题时，只需要将对应的观测时间、赤经赤纬、自行、视差、视向速度、观测站地即可理位置修改即可。</p>
+<h3 id="月球测量"><a href="#月球测量" class="headerlink" title="月球测量"></a>月球测量</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">*     APPARENT AND TOPOCENTRIC PLACE OF THE MOON</span><br><span class="line">      MOON = IDSS ( <span class="string">'MOON'</span> )</span><br><span class="line">      CALL APPLAN ( TTJD, MOON, IEARTH,   RA, DEC, DIS )</span><br><span class="line">      CALL TPPLAN ( UT1JD, GLON, GLAT, HT,   RAT, DECT, DIST )</span><br><span class="line">      WRITE ( *, * )</span><br><span class="line">      WRITE ( *, * ) <span class="string">'Moon geocentric and topocentric positions:'</span></span><br><span class="line">      WRITE ( *, <span class="number">9030</span> ) RA, DEC, DIS</span><br><span class="line">      WRITE ( *, <span class="number">9030</span> ) RAT, DECT, DIST</span><br></pre></td></tr></table></figure>
+<p>与先前恒星测量略有不同。</p>
+<p>IDSS函数为通过输入观测目标的字母串，然后返回对应的编号值，本质即为字典。</p>
+<p>根据手册，IEARTH作用不大，几乎只起到了占位符的作用，在处理自己的问题时对其保持不变即可。</p>
+<p>通过APPLAN、TPPLAN函数对太阳系内主要天体进行计算。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">*     TOPOCENTRIC PLACE OF THE MOON -- SHOULD BE SAME AS ABOVE</span><br><span class="line">      OBSERV(<span class="number">1</span>) = GLON</span><br><span class="line">      OBSERV(<span class="number">2</span>) = GLAT</span><br><span class="line">      OBSERV(<span class="number">3</span>) = HT</span><br><span class="line">C      OBSERV(<span class="number">4</span>) = ( TTJD - UT1JD ) * <span class="number">86400.D0</span> </span><br><span class="line">      <span class="keyword">CALL</span> PLACE ( TTJD, <span class="string">'MOON'</span>, <span class="number">1</span>, <span class="number">1</span>, STAR, OBSERV, SKYPOS )</span><br><span class="line">      RAT  = SKYPOS(<span class="number">4</span>)</span><br><span class="line">      DECT = SKYPOS(<span class="number">5</span>)</span><br><span class="line">      DIST = SKYPOS(<span class="number">6</span>)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9030</span> ) RAT, DECT, DIST</span><br></pre></td></tr></table></figure>
+<p>此为另一种方法计算月球的站心位置。实际上类似于先前的APSTAR、APPLAN等函数，都是调用了最基本的PLACE函数。</p>
+<h3 id="地平坐标计算"><a href="#地平坐标计算" class="headerlink" title="地平坐标计算"></a>地平坐标计算</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">*     POSITION OF THE MOON IN LOCAL HORIZON COORDINATES</span><br><span class="line">*     (POLAR MOTION IGNORED HERE)</span><br><span class="line">      CALL ZDAZ ( UT1JD, <span class="number">0.</span>D0, <span class="number">0.</span>D0, GLON, GLAT, HT, RAT, DECT, <span class="number">1</span>,</span><br><span class="line">     .              ZD, AZ, RAR, DECR )</span><br><span class="line">      WRITE ( *, * )</span><br><span class="line">      WRITE ( *, * ) <span class="string">'Moon zenith distance and azimuth:'</span></span><br><span class="line">      WRITE ( *, <span class="number">9010</span> ) ZD, AZ</span><br></pre></td></tr></table></figure>
+<p>ZDAZ函数，其中第二第三项为极移修正，此处示例忽略了极移因此为0.D0，在稍后的操作中我们可以将极移的影响计算进去，修改为所查询到的DX、DY，代入即可。</p>
+<p>此外需要提供测站的地理位置，观测目标的站心位置，第9项的1意为考虑大气折射，忽略则设置为0即可。最后返回天顶距与方位角。</p>
+<hr>
+<p>示例程序后面还计算了格林尼治时间、火星黄道坐标、地球极移等等，但与这次试验目标无关，也就不介绍了。</p>
+<h2 id="试验过程"><a href="#试验过程" class="headerlink" title="试验过程"></a>试验过程</h2><h3 id="题目一"><a href="#题目一" class="headerlink" title="题目一"></a>题目一</h3><p>完整内容附于最后。</p>
+<p>首先修改参数，将示例程序中的数据替换为题目给出与查询的数据：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">DATA</span> IYEAR, MONTH, IDAY, HOUR /</span><br><span class="line">.     <span class="number">2020</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">23.262097222222224D0</span> /</span><br><span class="line"></span><br><span class="line"> <span class="keyword">DATA</span> LEAPS, UT1UTC, XP, YP /</span><br><span class="line">.     <span class="number">37</span>, -<span class="number">0.2425171D0</span>, <span class="number">0.075815D0</span>,<span class="number">0.435887D0</span> /</span><br><span class="line"></span><br><span class="line"> <span class="keyword">DATA</span> GLON, GLAT, HT / -<span class="number">70.736544D0</span>, -<span class="number">30.24075861D0</span>, <span class="number">2378.D0</span> /</span><br></pre></td></tr></table></figure>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RA2000 = <span class="number">14.571336619444445D0</span></span><br><span class="line">DC2000 = -<span class="number">12.519554583333333D0</span></span><br><span class="line">PMRA   =  -<span class="number">354.45D0</span></span><br><span class="line">PMDEC  = +<span class="number">595.35D0</span></span><br><span class="line">PARX   =   <span class="number">164.99D0</span></span><br><span class="line">RV     =   <span class="number">0D0</span></span><br></pre></td></tr></table></figure>
+<p>由于题目涉及修改结果的单位，因此添加一个用于修改单位的子程序，将以小时、度为单位的赤经赤纬修改为以小时、分、秒与度、角分、角秒表示。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">SUBROUTINE</span></span> thetaA ( RA, rah, ram, ras )</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> RA</span><br><span class="line">      <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> rah,ram,ras</span><br><span class="line"></span><br><span class="line">      <span class="keyword">IF</span> (RA.gt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">            rah = <span class="built_in">int</span>(RA)</span><br><span class="line">            ram = ( RA - rah ) * <span class="number">60</span> </span><br><span class="line">            ras = ( ram - <span class="built_in">int</span>(ram) )*<span class="number">60</span></span><br><span class="line">            ram = <span class="built_in">int</span>(ram)</span><br><span class="line">      <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">IF</span> (RA.lt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">            RA  = -RA</span><br><span class="line">            rah = <span class="built_in">int</span>(RA)</span><br><span class="line">            ram = ( RA - rah ) * <span class="number">60</span> </span><br><span class="line">            ras = ( ram - <span class="built_in">int</span>(ram) )*<span class="number">60</span></span><br><span class="line">            ram = <span class="built_in">int</span>(ram)</span><br><span class="line">            rah = -rah</span><br><span class="line">            RA  = -RA</span><br><span class="line">      <span class="keyword">ENDIF</span></span><br><span class="line"><span class="keyword">RETURN</span></span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>由此也可以发现，Fortran在调用子程序时，与python略有不同，即使是最开始的值，也有可能被修改，在将输入值取负号后，还要再取一次负号防止更改了初始值。</p>
+<h3 id="题目二"><a href="#题目二" class="headerlink" title="题目二"></a>题目二</h3><p>完整内容附于最后。</p>
+<p>与题一的初始数据不同为观测站的坐标。</p>
+<p>通过查询兴隆观测站官网可得数据。<a href="http://www.xinglong-naoc.org/html/jggk/detail-2.html" target="_blank" rel="noopener">http://www.xinglong-naoc.org/html/jggk/detail-2.html</a></p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DATA</span> GLON, GLAT, HT / <span class="number">117.577222D0</span>, <span class="number">40.395833D0</span>, <span class="number">900.D0</span> /</span><br></pre></td></tr></table></figure>
+<p>为了程序的美观，用循环进行处理。首先建立字符串数组，然后按顺序抽取即可。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">      <span class="keyword">CHARACTER</span>*<span class="number">3</span> PLANETS_name(<span class="number">9</span>),PLANET_name</span><br><span class="line"></span><br><span class="line">      PLANETS_name= (/<span class="string">'MOO'</span>,<span class="string">'MER'</span>,<span class="string">'VEN'</span>,<span class="string">'MAR'</span>,</span><br><span class="line">     .<span class="string">'JUP'</span>,<span class="string">'SAT'</span>,<span class="string">'URA'</span>,<span class="string">'NEP'</span>,<span class="string">'PLU'</span>/)</span><br><span class="line">           </span><br><span class="line">      PLANET_num=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">DO</span> <span class="number">30</span> <span class="keyword">WHILE</span> ( PLANET_num.LT<span class="number">.10</span> )</span><br><span class="line">      </span><br><span class="line">      PLANET_name=PLANETS_name(PLANET_num)</span><br><span class="line">      <span class="keyword">NAME</span> = IDSS ( PLANET_name )</span><br><span class="line">      <span class="keyword">CALL</span> APPLAN ( TTJD, <span class="keyword">NAME</span>, IEARTH,   RA, DEC, DIS )</span><br><span class="line">            PLANET_num = PLANET_num + <span class="number">1</span></span><br><span class="line"><span class="number">30</span>    <span class="keyword">CONTINUE</span></span><br></pre></td></tr></table></figure>
+<p>对是否能观测到，此处理解为是否处于地平线以上，由此有</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">IF</span> (zdd.GT<span class="number">.90.</span><span class="number">0</span>) <span class="keyword">THEN</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) </span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'!!!!!!'</span>,PLANET_name,<span class="string">'   INVISIBLE'</span></span><br><span class="line"><span class="keyword">ENDIF</span></span><br></pre></td></tr></table></figure>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><h3 id="题目一-1"><a href="#题目一-1" class="headerlink" title="题目一"></a>题目一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">NOVAS Calculations</span><br><span class="line">-------------------------</span><br><span class="line"></span><br><span class="line">Geodetic location: </span><br><span class="line"> -70.736544000000         -30.240758610000        2378.000000000000</span><br><span class="line"></span><br><span class="line">DATE and TIME</span><br><span class="line">       2020           5           1   23.262097222222224     </span><br><span class="line"></span><br><span class="line">TT and UT1 Julian Dates and Delta-T: </span><br><span class="line"> 2458971.470055         2458971.469251          69.426517100000</span><br><span class="line"></span><br><span class="line">The star geocentric positions:</span><br><span class="line">  14.589657618243         -12.604673088883</span><br><span class="line">  14.h    35.m   22.76743s</span><br><span class="line"> -12.d    36.m   16.823s</span><br><span class="line"></span><br><span class="line">The star topocentric positions:</span><br><span class="line">  14.589658498483         -12.604656578923</span><br><span class="line">  14.h    35.m   22.77059s</span><br><span class="line"> -12.d    36.m   16.764s</span><br><span class="line"></span><br><span class="line">The Star zenith distance and azimuth:</span><br><span class="line">  75.371843281056          96.278676337388</span><br><span class="line">  75.d    22.m   18.636s</span><br><span class="line">  96.d    16.m   43.235s</span><br></pre></td></tr></table></figure>
+<h3 id="题目二-1"><a href="#题目二-1" class="headerlink" title="题目二"></a>题目二</h3><p>由结果可知位于兴隆观测站，此刻月球在地平线以下，不可见。</p>
+<p>但由于观测时间为2020年5月1日，$23^h15^m43^s.55\mathrm{UTC}$ </p>
+<p>北京时间为2020年5月2日，$7^h15^m43^s.55\mathrm{UTC+8}$ </p>
+<p>此刻已经天亮，想观察其他行星也较为困难。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br></pre></td><td class="code"><pre><span class="line">NOVAS Calculations</span><br><span class="line">-------------------------</span><br><span class="line"></span><br><span class="line">Geodetic location: </span><br><span class="line"> 117.577222000000          40.395833000000         900.000000000000</span><br><span class="line"></span><br><span class="line">DATE and TIME</span><br><span class="line">       2020           5           1   23.262097222222224     </span><br><span class="line"></span><br><span class="line">TT and UT1 Julian Dates and Delta-T: </span><br><span class="line"> 2458971.470055         2458971.469251          69.426517100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MOO--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">  10.002164584844          16.760759164598        0.248441208653D-02</span><br><span class="line">  10.h     0.m    7.79251s</span><br><span class="line">  16.d    45.m   38.733s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">   9.999294039988          15.945468700467        0.250783067720D-02</span><br><span class="line">   9.h    59.m   57.45854s</span><br><span class="line">  15.d    56.m   43.687s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line"> 123.582884688801         356.368501682819</span><br><span class="line"> 123.d    34.m   58.385s</span><br><span class="line"> 356.d    22.m    6.606s</span><br><span class="line"></span><br><span class="line">!!!!!!MOO   INVISIBLE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MER--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">   2.427435986723          13.785296374688        0.132758063451D+01</span><br><span class="line">   2.h    25.m   38.76955s</span><br><span class="line">  13.d    47.m    7.067s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">   2.427527905700          13.784245926636        0.132756306462D+01</span><br><span class="line">   2.h    25.m   39.10046s</span><br><span class="line">  13.d    47.m    3.285s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  65.598629569233          92.406335639752</span><br><span class="line">  65.d    35.m   55.066s</span><br><span class="line">  92.d    24.m   22.808s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">VEN--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">   5.211194189733          27.798656381788        0.422630830955D+00</span><br><span class="line">   5.h    12.m   40.29908s</span><br><span class="line">  27.d    47.m   55.163s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">   5.211501824013          27.794582885383        0.422628475382D+00</span><br><span class="line">   5.h    12.m   41.40657s</span><br><span class="line">  27.d    47.m   40.498s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  86.527930865671          55.627412476625</span><br><span class="line">  86.d    31.m   40.551s</span><br><span class="line">  55.d    37.m   38.685s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MAR--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">  21.680947417071         -15.630191999995        0.122176552998D+01</span><br><span class="line">  21.h    40.m   51.41070s</span><br><span class="line"> -15.d    37.m   48.691s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">  21.680949113246         -15.631844547812        0.122174163011D+01</span><br><span class="line">  21.h    40.m   51.41681s</span><br><span class="line"> -15.d    37.m   54.640s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  56.025813476944         181.891602158404</span><br><span class="line">  56.d     1.m   32.929s</span><br><span class="line"> 181.d    53.m   29.768s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">JUP--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">  19.937474157665         -20.888675351049        0.482906570787D+01</span><br><span class="line">  19.h    56.m   14.90697s</span><br><span class="line"> -20.d    53.m   19.231s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">  19.937465607544         -20.889112954678        0.482904862752D+01</span><br><span class="line">  19.h    56.m   14.87619s</span><br><span class="line"> -20.d    53.m   20.807s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  66.485135849914         208.345030217478</span><br><span class="line">  66.d    29.m    6.489s</span><br><span class="line"> 208.d    20.m   42.109s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SAT--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">  20.277781114579         -19.840446580966        0.979417307885D+01</span><br><span class="line">  20.h    16.m   40.01201s</span><br><span class="line"> -19.d    50.m   25.608s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">  20.277780351685         -19.840666223154        0.979415418266D+01</span><br><span class="line">  20.h    16.m   40.00927s</span><br><span class="line"> -19.d    50.m   26.398s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  63.799228019693         203.832889256775</span><br><span class="line">  63.d    47.m   57.221s</span><br><span class="line"> 203.d    49.m   58.401s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">URA--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">   2.315087711060          13.398555892598        0.208070404851D+02</span><br><span class="line">   2.h    18.m   54.31576s</span><br><span class="line">  13.d    23.m   54.801s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">   2.315095143519          13.398475560271        0.208070222072D+02</span><br><span class="line">   2.h    18.m   54.34252s</span><br><span class="line">  13.d    23.m   54.512s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  64.557956607156          93.864638027835</span><br><span class="line">  64.d    33.m   28.644s</span><br><span class="line">  93.d    51.m   52.697s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NEP--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">  23.429610814108          -4.817465182521        0.305438653615D+02</span><br><span class="line">  23.h    25.m   46.59893s</span><br><span class="line">  -4.d    49.m    2.875s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">  23.429616636412          -4.817518811878        0.305438382057D+02</span><br><span class="line">  23.h    25.m   46.61989s</span><br><span class="line">  -4.d    49.m    3.068s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  50.518358929758         147.499103457954</span><br><span class="line">  50.d    31.m    6.092s</span><br><span class="line"> 147.d    29.m   56.772s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLU--------------------------</span><br><span class="line"> geocentric positions:</span><br><span class="line">  19.806107014962         -21.983642709766        0.337215325831D+02</span><br><span class="line">  19.h    48.m   21.98525s</span><br><span class="line"> -21.d    59.m    1.114s</span><br><span class="line"></span><br><span class="line"> geocentric positions:</span><br><span class="line">  19.806109277109         -21.983716516423        0.337215166924D+02</span><br><span class="line">  19.h    48.m   21.99340s</span><br><span class="line"> -21.d    59.m    1.379s</span><br><span class="line"></span><br><span class="line"> zenith distance and azimuth:</span><br><span class="line">  68.214885202733         209.697854624252</span><br><span class="line">  68.d    12.m   53.587s</span><br><span class="line"> 209.d    41.m   52.277s</span><br></pre></td></tr></table></figure>
+<h2 id="sample-f内容"><a href="#sample-f内容" class="headerlink" title="sample.f内容"></a>sample.f内容</h2><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line">*</span><br><span class="line">*     NOVAS SAMPLE CALCULATIONS</span><br><span class="line">*</span><br><span class="line">*     SEE CHAPTER <span class="number">3</span> OF USER<span class="string">'S GUIDE FOR EXPLANATION</span></span><br><span class="line"><span class="string">*     REQUIRES SOLSYS VERSION 1 OR 2</span></span><br><span class="line"><span class="string">*</span></span><br><span class="line"><span class="string">      IMPLICIT DOUBLE PRECISION ( A-H, O-Z )</span></span><br><span class="line"><span class="string">      IMPLICIT INTEGER ( I-N )</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">      DIMENSION STAR(6), OBSERV(6), SKYPOS(7),</span></span><br><span class="line"><span class="string">     .     POS(3), VEL(3), POSE(3), VTER(3), VCEL(3)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      PARAMETER ( PI     = 3.14159265358979324D0 )</span></span><br><span class="line"><span class="string">      PARAMETER ( DEGRAD = PI / 180.D0           ) </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      DATA STAR, OBSERV / 12 * 0.D0 /</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      DATA IYEAR, MONTH, IDAY, HOUR, LEAPS, UT1UTC, XP, YP /</span></span><br><span class="line"><span class="string">     .     2008, 4, 24, 10.605D0, 33, -0.387845D0, -0.002D0, +0.529D0 /</span></span><br><span class="line"><span class="string">     </span></span><br><span class="line"><span class="string">      DATA GLON, GLAT, HT / -70.D0, 42.D0, 0.D0 /</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">*     FORMAT STATEMENTS FOR OUTPUT</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> 9010 FORMAT(1X, 3(F17.12, 8X))</span></span><br><span class="line"><span class="string"> 9020 FORMAT(1X, 2(F15.6, 8X), 1F17.12) </span></span><br><span class="line"><span class="string"> 9030 FORMAT(1X, 2(F17.12, 8X), 1D18.12)</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>NOVAS Sample Calculations<span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>-------------------------<span class="string">'</span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">*     SETUP CALLS</span></span><br><span class="line"><span class="string">*     HIGH ACCURACY AND EQUINOX MODE ARE NOVAS DEFAULTS.</span></span><br><span class="line"><span class="string">      CALL HIACC</span></span><br><span class="line"><span class="string">      CALL EQINOX</span></span><br><span class="line"><span class="string">      IEARTH = IDSS ( '</span>EARTH<span class="string">' )</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">*     WRITE OUT ASSUMED LONGITUDE, LATITUDE, HEIGHT (ITRS = WGS-84)</span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>Geodetic location: <span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9010 ) GLON, GLAT, HT</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">*     ESTABLISH TIME ARGUMENTS</span></span><br><span class="line"><span class="string">      CALL JULDAT  ( IYEAR, MONTH, IDAY, HOUR,   UTCJD )</span></span><br><span class="line"><span class="string">      TTJD = UTCJD + ( LEAPS + 32.184D0 ) / 86400.D0</span></span><br><span class="line"><span class="string">	  UT1JD = UTCJD + UT1UTC / 86400.D0</span></span><br><span class="line"><span class="string">	  DELTAT = 32.184D0 + LEAPS - UT1UTC</span></span><br><span class="line"><span class="string">	  CALL SETDT ( DELTAT )</span></span><br><span class="line"><span class="string">	  WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>TT and UT1 Julian Dates and Delta-T: <span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9020 ) TTJD, UT1JD, DELTAT</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">*     APPARENT AND TOPOCENTRIC PLACE OF STAR FK6 1307 = GRB 1830</span></span><br><span class="line"><span class="string">      RA2000 = 11.88299133D0</span></span><br><span class="line"><span class="string">      DC2000 = 37.71867646D0</span></span><br><span class="line"><span class="string">      PMRA   =  4003.27D0</span></span><br><span class="line"><span class="string">      PMDEC  = -5815.07D0</span></span><br><span class="line"><span class="string">      PARX   =   109.21D0</span></span><br><span class="line"><span class="string">      RV     =   -98.8D0</span></span><br><span class="line"><span class="string">      CALL APSTAR ( TTJD, IEARTH, RA2000, DC2000, PMRA, PMDEC, PARX, RV,</span></span><br><span class="line"><span class="string">     .     RA, DEC )</span></span><br><span class="line"><span class="string">      CALL TPSTAR ( UT1JD, GLON, GLAT, HT,   RAT, DECT )</span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>FK6 <span class="number">1307</span> geocentric and topocentric positions:<span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9010 ) RA, DEC</span></span><br><span class="line"><span class="string">      WRITE ( *, 9010 ) RAT, DECT</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">*     APPARENT AND TOPOCENTRIC PLACE OF THE MOON</span></span><br><span class="line"><span class="string">      MOON = IDSS ( '</span>MOON<span class="string">' )</span></span><br><span class="line"><span class="string">      CALL APPLAN ( TTJD, MOON, IEARTH,   RA, DEC, DIS )</span></span><br><span class="line"><span class="string">      CALL TPPLAN ( UT1JD, GLON, GLAT, HT,   RAT, DECT, DIST )</span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>Moon geocentric and topocentric positions:<span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9030 ) RA, DEC, DIS</span></span><br><span class="line"><span class="string">      WRITE ( *, 9030 ) RAT, DECT, DIST</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">*     TOPOCENTRIC PLACE OF THE MOON -- SHOULD BE SAME AS ABOVE</span></span><br><span class="line"><span class="string">      OBSERV(1) = GLON</span></span><br><span class="line"><span class="string">      OBSERV(2) = GLAT</span></span><br><span class="line"><span class="string">      OBSERV(3) = HT</span></span><br><span class="line"><span class="string">C      OBSERV(4) = ( TTJD - UT1JD ) * 86400.D0 </span></span><br><span class="line"><span class="string">      CALL PLACE ( TTJD, '</span>MOON<span class="string">', 1, 1, STAR, OBSERV, SKYPOS )</span></span><br><span class="line"><span class="string">      RAT  = SKYPOS(4)</span></span><br><span class="line"><span class="string">      DECT = SKYPOS(5)</span></span><br><span class="line"><span class="string">      DIST = SKYPOS(6)</span></span><br><span class="line"><span class="string">      WRITE ( *, 9030 ) RAT, DECT, DIST</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">*     POSITION OF THE MOON IN LOCAL HORIZON COORDINATES</span></span><br><span class="line"><span class="string">*     (POLAR MOTION IGNORED HERE)</span></span><br><span class="line"><span class="string">      CALL ZDAZ ( UT1JD, 0.D0, 0.D0, GLON, GLAT, HT, RAT, DECT, 1,</span></span><br><span class="line"><span class="string">     .              ZD, AZ, RAR, DECR )</span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>Moon zenith distance and azimuth:<span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9010 ) ZD, AZ</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">*     GREENWICH APPARENT SIDEREAL TIME AND EARTH ROTATION ANGLE</span></span><br><span class="line"><span class="string">      CALL SIDTIM ( UT1JD, 0.D0, 1, GAST )</span></span><br><span class="line"><span class="string">      ST = GAST + GLON / 15.D0</span></span><br><span class="line"><span class="string">      IF ( ST .GE. 24.D0 ) ST = ST - 24.D0</span></span><br><span class="line"><span class="string">      IF ( ST .LT.  0.D0 ) ST = ST + 24.D0</span></span><br><span class="line"><span class="string">      CALL EROT ( UT1JD, 0.D0,   ERA )</span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>Greenwich and local sidereal time and <span class="string">',</span></span><br><span class="line"><span class="string">     .               '</span>Earth Rotation Angle:<span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9010 ) GAST, ST, ERA</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">*     HELIOCENTRIC POSITION OF MARS IN BCRS      </span></span><br><span class="line"><span class="string">      TDBJD = TTJD</span></span><br><span class="line"><span class="string">*     ABOVE IS AN APPROXIMATION GOOD TO 0.0017 SECONDS </span></span><br><span class="line"><span class="string">*     APPROXIMATION COULD LEAD TO ERROR OF ~50 M IN POSITION OF MARS</span></span><br><span class="line"><span class="string">      MARS = IDSS ( '</span>MARS<span class="string">' )</span></span><br><span class="line"><span class="string">      CALL SOLSYS ( TDBJD, MARS, 1,   POS, VEL, IERR )</span></span><br><span class="line"><span class="string">      IF ( IERR .EQ. 0 ) THEN</span></span><br><span class="line"><span class="string">          CALL EQEC ( 0.D0, 0, POS,   POSE )</span></span><br><span class="line"><span class="string">          CALL ANGLES ( POSE,   ELON, ELAT )</span></span><br><span class="line"><span class="string">          WRITE ( *, * )</span></span><br><span class="line"><span class="string">          WRITE ( *, * ) '</span>Mars heliocentric ecliptic longitude and <span class="string">',</span></span><br><span class="line"><span class="string">     .                   '</span>latitude and radius vector: <span class="string">'</span></span><br><span class="line"><span class="string">          R = DSQRT (POSE(1)**2 + POSE(2)**2 +POSE(3)**2)</span></span><br><span class="line"><span class="string">          WRITE ( *, 9010 ) ELON * 15.D0, ELAT, R </span></span><br><span class="line"><span class="string">      ELSE</span></span><br><span class="line"><span class="string">          WRITE ( *, * ) '</span>For Mars, SOLSYS returns error <span class="string">', IERR</span></span><br><span class="line"><span class="string">      END IF</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">*     TERRESTRIAL TO CELESTIAL TRANSFORMATION</span></span><br><span class="line"><span class="string">      SINLON = DSIN ( GLON * DEGRAD ) </span></span><br><span class="line"><span class="string">      COSLON = DCOS ( GLON * DEGRAD ) </span></span><br><span class="line"><span class="string">      SINLAT = DSIN ( GLAT * DEGRAD ) </span></span><br><span class="line"><span class="string">      COSLAT = DCOS ( GLAT * DEGRAD ) </span></span><br><span class="line"><span class="string">*     FORM VECTOR TOWARD LOCAL ZENITH (ORTHOGONAL TO ELLIPSOID) IN ITRS</span></span><br><span class="line"><span class="string">      VTER(1) = COSLAT * COSLON</span></span><br><span class="line"><span class="string">      VTER(2) = COSLAT * SINLON</span></span><br><span class="line"><span class="string">      VTER(3) = SINLAT</span></span><br><span class="line"><span class="string">*     TRANSFORM VECTOR TO GCRS</span></span><br><span class="line"><span class="string">      CALL TERCEL ( UT1JD, 0.D0, XP, YP, VTER,   VCEL )</span></span><br><span class="line"><span class="string">      CALL ANGLES ( VCEL,   RA, DEC )</span></span><br><span class="line"><span class="string">      WRITE ( *, * ) </span></span><br><span class="line"><span class="string">      WRITE ( *, * ) '</span>Direction of zenith vector (RA &amp; Dec) <span class="keyword">in</span> GCRS:<span class="string">'</span></span><br><span class="line"><span class="string">      WRITE ( *, 9010 ) RA, DEC</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">      WRITE ( *, * )</span></span><br><span class="line"><span class="string">      STOP</span></span><br><span class="line"><span class="string">      END</span></span><br></pre></td></tr></table></figure>
+<h2 id="star-f内容-题目一"><a href="#star-f内容-题目一" class="headerlink" title="star.f内容[题目一]"></a>star.f内容[题目一]</h2><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">      <span class="keyword">IMPLICIT</span> <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> ( A-H, O-Z )</span><br><span class="line">      <span class="keyword">IMPLICIT</span> <span class="keyword">INTEGER</span> ( I-N )</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">DIMENSION</span> STAR(<span class="number">6</span>), OBSERV(<span class="number">6</span>), SKYPOS(<span class="number">7</span>),</span><br><span class="line">     .     POS(<span class="number">3</span>), VEL(<span class="number">3</span>), POSE(<span class="number">3</span>), VTER(<span class="number">3</span>), VCEL(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">PARAMETER</span> ( PI     = <span class="number">3.14159265358979324D0</span> )</span><br><span class="line">      <span class="keyword">PARAMETER</span> ( DEGRAD = PI / <span class="number">180.D0</span>           ) </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="keyword">DATA</span> STAR, OBSERV / <span class="number">12</span> * <span class="number">0.D0</span> /</span><br><span class="line"></span><br><span class="line">      <span class="keyword">DATA</span> IYEAR, MONTH, IDAY, HOUR /</span><br><span class="line">     .     <span class="number">2020</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">23.262097222222224D0</span> /</span><br><span class="line">     </span><br><span class="line">      <span class="keyword">DATA</span> LEAPS, UT1UTC, XP, YP /</span><br><span class="line">     .     <span class="number">37</span>, -<span class="number">0.2425171D0</span>, <span class="number">0.075815D0</span>,<span class="number">0.435887D0</span> /</span><br><span class="line"></span><br><span class="line">      <span class="keyword">DATA</span> GLON, GLAT, HT / -<span class="number">70.736544D0</span>, -<span class="number">30.24075861D0</span>, <span class="number">2378.D0</span> /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*     <span class="keyword">FORMAT</span> STATEMENTS FOR OUTPUT</span><br><span class="line"></span><br><span class="line"> <span class="number">9010</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, <span class="number">3</span>(F17<span class="number">.12</span>, <span class="number">8</span>X))</span><br><span class="line"> <span class="number">9020</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, <span class="number">2</span>(F15<span class="number">.6</span>, <span class="number">8</span>X), <span class="number">1</span>F17<span class="number">.12</span>) </span><br><span class="line"> <span class="number">9030</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, <span class="number">2</span>(F17<span class="number">.12</span>, <span class="number">8</span>X), <span class="number">1D18.</span><span class="number">12</span>)</span><br><span class="line"> <span class="number">9040</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, F5<span class="number">.0</span>,<span class="string">'d'</span>, <span class="number">2</span>X,F5<span class="number">.0</span>,<span class="string">'m'</span> <span class="number">2</span>X, <span class="number">1</span>F7<span class="number">.3</span>,<span class="string">'s'</span>)</span><br><span class="line"> <span class="number">9050</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, F5<span class="number">.0</span>,<span class="string">'h'</span>, <span class="number">2</span>X,F5<span class="number">.0</span>,<span class="string">'m'</span> <span class="number">2</span>X, <span class="number">1</span>F9<span class="number">.5</span>,<span class="string">'s'</span>)</span><br><span class="line"> </span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'NOVAS Calculations'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'-------------------------'</span></span><br><span class="line">  </span><br><span class="line">*     SETUP CALLS</span><br><span class="line">*     HIGH ACCURACY AND EQUINOX MODE ARE NOVAS DEFAULTS.</span><br><span class="line">      <span class="keyword">CALL</span> HIACC</span><br><span class="line">      <span class="keyword">CALL</span> EQINOX</span><br><span class="line">      IEARTH = IDSS ( <span class="string">'EARTH'</span> )</span><br><span class="line">    </span><br><span class="line">*     <span class="built_in">WRITE</span> <span class="keyword">OUT</span> ASSUMED LONGITUDE, LATITUDE, HEIGHT (ITRS = WGS-<span class="number">84</span>)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'Geodetic location: '</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) GLON, GLAT, HT</span><br><span class="line">    </span><br><span class="line">*     ESTABLISH TIME ARGUMENTS</span><br><span class="line">      <span class="keyword">CALL</span> JULDAT  ( IYEAR, MONTH, IDAY, HOUR,   UTCJD )</span><br><span class="line">      TTJD = UTCJD + ( LEAPS + <span class="number">32.184D0</span> ) / <span class="number">86400.D0</span></span><br><span class="line">	  UT1JD = UTCJD + UT1UTC / <span class="number">86400.D0</span></span><br><span class="line">	  DELTAT = <span class="number">32.184D0</span> + LEAPS - UT1UTC</span><br><span class="line">        <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'DATE and TIME'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) IYEAR,MONTH,IDAY,HOUR</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'TT and UT1 Julian Dates and Delta-T: '</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9020</span> ) TTJD, UT1JD, DELTAT</span><br><span class="line">      </span><br><span class="line">*     APPARENT AND TOPOCENTRIC PLACE OF STAR FK6 <span class="number">1307</span> = GRB <span class="number">1830</span></span><br><span class="line">      RA2000 = <span class="number">14.571336619444445D0</span></span><br><span class="line">      DC2000 = -<span class="number">12.519554583333333D0</span></span><br><span class="line">      PMRA   =  -<span class="number">354.45D0</span></span><br><span class="line">      PMDEC  = +<span class="number">595.35D0</span></span><br><span class="line">      PARX   =   <span class="number">164.99D0</span></span><br><span class="line">      RV     =   <span class="number">0D0</span></span><br><span class="line">      <span class="keyword">CALL</span> APSTAR ( TTJD, IEARTH, RA2000, DC2000, PMRA, PMDEC, PARX, RV,</span><br><span class="line">     .     RA, DEC )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'The star geocentric positions:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) RA, DEC</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(RA,rah,ram,ras)</span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">9050</span>) rah,ram,ras</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(DEC,decd,decm,decs)</span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">9040</span>) decd,decm,decs</span><br><span class="line"></span><br><span class="line">      <span class="keyword">CALL</span> TPSTAR ( UT1JD, GLON, GLAT, HT,   RAT, DECT )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'The star topocentric positions:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) RAT, DECT</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(RAT,rath,ratm,rats)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9050</span> ) rath,ratm,rats</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(DECT,dectd,dectm,dects)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9040</span> ) dectd,dectm,dects</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*     <span class="keyword">POSITION</span> OF THE STAR <span class="keyword">IN</span> LOCAL HORIZON COORDINATES</span><br><span class="line"></span><br><span class="line">      <span class="keyword">CALL</span> ZDAZ ( UT1JD, XP, YP, GLON, GLAT, HT, RAT, DECT, <span class="number">1</span>,</span><br><span class="line">     .              ZD, AZ, RAR, DECR )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'The Star zenith distance and azimuth:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) ZD, AZ</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(ZD,zdd,zdm,zds)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9040</span> ) zdd,zdm,zds</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(AZ,azd,azm,azs)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9040</span> ) azd,azm,azs</span><br><span class="line"></span><br><span class="line">      <span class="keyword">END</span></span><br><span class="line"></span><br><span class="line">      </span><br><span class="line">      <span class="function"><span class="keyword">SUBROUTINE</span></span> thetaA ( RA, rah, ram, ras )</span><br><span class="line">            <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> RA</span><br><span class="line">            <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> rah,ram,ras</span><br><span class="line"></span><br><span class="line">            <span class="keyword">IF</span> (RA.gt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">                  rah = <span class="built_in">int</span>(RA)</span><br><span class="line">                  ram = ( RA - rah ) * <span class="number">60</span> </span><br><span class="line">                  ras = ( ram - <span class="built_in">int</span>(ram) )*<span class="number">60</span></span><br><span class="line">                  ram = <span class="built_in">int</span>(ram)</span><br><span class="line">            <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">IF</span> (RA.lt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">                  RA  = -RA</span><br><span class="line">                  rah = <span class="built_in">int</span>(RA)</span><br><span class="line">                  ram = ( RA - rah ) * <span class="number">60</span> </span><br><span class="line">                  ras = ( ram - <span class="built_in">int</span>(ram) )*<span class="number">60</span></span><br><span class="line">                  ram = <span class="built_in">int</span>(ram)</span><br><span class="line">                  rah = -rah</span><br><span class="line">                  RA  = -RA</span><br><span class="line">            <span class="keyword">ENDIF</span></span><br><span class="line">      <span class="keyword">RETURN</span></span><br><span class="line">      <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<h2 id="planet-f内容-题目二"><a href="#planet-f内容-题目二" class="headerlink" title="planet.f内容[题目二]"></a>planet.f内容[题目二]</h2><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">      <span class="keyword">IMPLICIT</span> <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> ( A-H, O-Z )</span><br><span class="line">      <span class="keyword">IMPLICIT</span> <span class="keyword">INTEGER</span> ( I-N )</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">DIMENSION</span> STAR(<span class="number">6</span>), OBSERV(<span class="number">6</span>), SKYPOS(<span class="number">7</span>),</span><br><span class="line">     .     POS(<span class="number">3</span>), VEL(<span class="number">3</span>), POSE(<span class="number">3</span>), VTER(<span class="number">3</span>), VCEL(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">PARAMETER</span> ( PI     = <span class="number">3.14159265358979324D0</span> )</span><br><span class="line">      <span class="keyword">PARAMETER</span> ( DEGRAD = PI / <span class="number">180.D0</span>           ) </span><br><span class="line"></span><br><span class="line">      <span class="keyword">INTEGER</span> PLANET_num</span><br><span class="line">      <span class="keyword">CHARACTER</span>*<span class="number">3</span> PLANETS_name(<span class="number">9</span>),PLANET_name</span><br><span class="line"></span><br><span class="line">      <span class="keyword">DATA</span> STAR, OBSERV / <span class="number">12</span> * <span class="number">0.D0</span> /</span><br><span class="line"></span><br><span class="line">      <span class="keyword">DATA</span> IYEAR, MONTH, IDAY, HOUR /</span><br><span class="line">     .     <span class="number">2020</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">23.262097222222224D0</span> /</span><br><span class="line">     </span><br><span class="line">      <span class="keyword">DATA</span> LEAPS, UT1UTC, XP, YP /</span><br><span class="line">     .     <span class="number">37</span>, -<span class="number">0.2425171D0</span>, <span class="number">0.075815D0</span>,<span class="number">0.435887D0</span> /</span><br><span class="line"></span><br><span class="line">      <span class="keyword">DATA</span> GLON, GLAT, HT / <span class="number">117.577222D0</span>, <span class="number">40.395833D0</span>, <span class="number">900.D0</span> /</span><br><span class="line"></span><br><span class="line">      PLANETS_name= (/<span class="string">'MOO'</span>,<span class="string">'MER'</span>,<span class="string">'VEN'</span>,<span class="string">'MAR'</span>,</span><br><span class="line">     .<span class="string">'JUP'</span>,<span class="string">'SAT'</span>,<span class="string">'URA'</span>,<span class="string">'NEP'</span>,<span class="string">'PLU'</span>/)</span><br><span class="line">      </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*     <span class="keyword">FORMAT</span> STATEMENTS FOR OUTPUT</span><br><span class="line"></span><br><span class="line"> <span class="number">9010</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, <span class="number">3</span>(F17<span class="number">.12</span>, <span class="number">8</span>X))</span><br><span class="line"> <span class="number">9020</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, <span class="number">2</span>(F15<span class="number">.6</span>, <span class="number">8</span>X), <span class="number">1</span>F17<span class="number">.12</span>) </span><br><span class="line"> <span class="number">9030</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, <span class="number">2</span>(F17<span class="number">.12</span>, <span class="number">8</span>X), <span class="number">1D18.</span><span class="number">12</span>)</span><br><span class="line"> <span class="number">9040</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, F5<span class="number">.0</span>,<span class="string">'d'</span>, <span class="number">2</span>X,F5<span class="number">.0</span>,<span class="string">'m'</span> <span class="number">2</span>X, <span class="number">1</span>F7<span class="number">.3</span>,<span class="string">'s'</span>)</span><br><span class="line"> <span class="number">9050</span> <span class="keyword">FORMAT</span>(<span class="number">1</span>X, F5<span class="number">.0</span>,<span class="string">'h'</span>, <span class="number">2</span>X,F5<span class="number">.0</span>,<span class="string">'m'</span> <span class="number">2</span>X, <span class="number">1</span>F9<span class="number">.5</span>,<span class="string">'s'</span>)</span><br><span class="line"> </span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'NOVAS Calculations'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'-------------------------'</span></span><br><span class="line">  </span><br><span class="line">*     SETUP CALLS</span><br><span class="line">*     HIGH ACCURACY AND EQUINOX MODE ARE NOVAS DEFAULTS.</span><br><span class="line">      <span class="keyword">CALL</span> HIACC</span><br><span class="line">      <span class="keyword">CALL</span> EQINOX</span><br><span class="line">      IEARTH = IDSS ( <span class="string">'EARTH'</span> )</span><br><span class="line">    </span><br><span class="line">*     <span class="built_in">WRITE</span> <span class="keyword">OUT</span> ASSUMED LONGITUDE, LATITUDE, HEIGHT (ITRS = WGS-<span class="number">84</span>)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'Geodetic location: '</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) GLON, GLAT, HT</span><br><span class="line">    </span><br><span class="line">*     ESTABLISH TIME ARGUMENTS</span><br><span class="line">      <span class="keyword">CALL</span> JULDAT  ( IYEAR, MONTH, IDAY, HOUR,   UTCJD )</span><br><span class="line">      TTJD = UTCJD + ( LEAPS + <span class="number">32.184D0</span> ) / <span class="number">86400.D0</span></span><br><span class="line">	  UT1JD = UTCJD + UT1UTC / <span class="number">86400.D0</span></span><br><span class="line">	  DELTAT = <span class="number">32.184D0</span> + LEAPS - UT1UTC</span><br><span class="line">        <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'DATE and TIME'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) IYEAR,MONTH,IDAY,HOUR</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">'TT and UT1 Julian Dates and Delta-T: '</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9020</span> ) TTJD, UT1JD, DELTAT</span><br><span class="line">      </span><br><span class="line">      PLANET_num=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">DO</span> <span class="number">30</span> <span class="keyword">WHILE</span> ( PLANET_num.LT<span class="number">.10</span> )</span><br><span class="line">      </span><br><span class="line">      PLANET_name=PLANETS_name(PLANET_num)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">NAME</span> = IDSS ( PLANET_name )</span><br><span class="line"></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="keyword">CALL</span> APPLAN ( TTJD, <span class="keyword">NAME</span>, IEARTH,   RA, DEC, DIS )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) PLANET_name,<span class="string">'--------------------------'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">' geocentric positions:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9030</span> ) RA, DEC, DIS</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(RA,rah,ram,ras)</span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">9050</span>) rah,ram,ras</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(DEC,decd,decm,decs)</span><br><span class="line">      <span class="built_in">WRITE</span>(*,<span class="number">9040</span>) decd,decm,decs</span><br><span class="line"></span><br><span class="line">      <span class="keyword">CALL</span> TPPLAN ( UT1JD, GLON, GLAT, HT,   RAT, DECT, DIST )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">' geocentric positions:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9030</span> ) RAT, DECT, DIST</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(RAT,rath,ratm,rats)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9050</span> ) rath,ratm,rats</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(DECT,dectd,dectm,dects)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9040</span> ) dectd,dectm,dects</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      </span><br><span class="line">*     <span class="keyword">POSITION</span> OF THE PLANET <span class="keyword">IN</span> LOCAL HORIZON COORDINATES</span><br><span class="line"></span><br><span class="line">      <span class="keyword">CALL</span> ZDAZ ( UT1JD, XP, YP, GLON, GLAT, HT, RAT, DECT, <span class="number">1</span>,</span><br><span class="line">     .              ZD, AZ, RAR, DECR )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * )</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, * ) <span class="string">' zenith distance and azimuth:'</span></span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9010</span> ) ZD, AZ</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(ZD,zdd,zdm,zds)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9040</span> ) zdd,zdm,zds</span><br><span class="line">      <span class="keyword">CALL</span> thetaA(AZ,azd,azm,azs)</span><br><span class="line">      <span class="built_in">WRITE</span> ( *, <span class="number">9040</span> ) azd,azm,azs</span><br><span class="line"></span><br><span class="line">      <span class="keyword">IF</span> (zdd.GT<span class="number">.90.</span><span class="number">0</span>) <span class="keyword">THEN</span></span><br><span class="line">            <span class="built_in">WRITE</span> ( *, * ) </span><br><span class="line">            <span class="built_in">WRITE</span> ( *, * ) <span class="string">'!!!!!!'</span>,PLANET_name,<span class="string">'   INVISIBLE'</span></span><br><span class="line">      <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line">      PLANET_num = PLANET_num + <span class="number">1</span></span><br><span class="line"><span class="number">30</span>    <span class="keyword">CONTINUE</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">END</span></span><br><span class="line"></span><br><span class="line">      </span><br><span class="line">      <span class="function"><span class="keyword">SUBROUTINE</span></span> thetaA ( RA, rah, ram, ras )</span><br><span class="line">            <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> RA</span><br><span class="line">            <span class="keyword">DOUBLE</span> <span class="keyword">PRECISION</span> rah,ram,ras</span><br><span class="line"></span><br><span class="line">            <span class="keyword">IF</span> (RA.gt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">                  rah = <span class="built_in">int</span>(RA)</span><br><span class="line">                  ram = ( RA - rah ) * <span class="number">60</span> </span><br><span class="line">                  ras = ( ram - <span class="built_in">int</span>(ram) )*<span class="number">60</span></span><br><span class="line">                  ram = <span class="built_in">int</span>(ram)</span><br><span class="line">            <span class="keyword">ENDIF</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">IF</span> (RA.lt<span class="number">.0</span>) <span class="keyword">THEN</span></span><br><span class="line">                  RA  = -RA</span><br><span class="line">                  rah = <span class="built_in">int</span>(RA)</span><br><span class="line">                  ram = ( RA - rah ) * <span class="number">60</span> </span><br><span class="line">                  ras = ( ram - <span class="built_in">int</span>(ram) )*<span class="number">60</span></span><br><span class="line">                  ram = <span class="built_in">int</span>(ram)</span><br><span class="line">                  rah = -rah</span><br><span class="line">                  RA  = -RA</span><br><span class="line">            <span class="keyword">ENDIF</span></span><br><span class="line">      <span class="keyword">RETURN</span></span><br><span class="line">      <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>hexo公式总是容易出毛病。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$\mathrm&#123;\mu_ \alpha&#x3D;-354.45 mas&#x2F;y  \quad \mu_ \alpha&#x3D;+595.35 mas&#x2F;y&#125;$</span><br></pre></td></tr></table></figure>
+<p>这句话有问题吗？ 就是识别不出来。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/jpl/" rel="tag"># jpl</a>
+              <a href="/tags/%E7%90%83%E9%9D%A2%E5%A4%A9%E6%96%87/" rel="tag"># 球面天文</a>
+              <a href="/tags/NOVAS/" rel="tag"># NOVAS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/02/%E6%98%A5%E5%88%86%E7%82%B9/" rel="prev" title="春分点">
+      <i class="fa fa-chevron-left"></i> 春分点
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目内容"><span class="nav-number">1.</span> <span class="nav-text">题目内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#恒星观测-题目一"><span class="nav-number">1.1.</span> <span class="nav-text">恒星观测[题目一]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系内观测-题目二"><span class="nav-number">1.2.</span> <span class="nav-text">系内观测[题目二]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验准备"><span class="nav-number">2.</span> <span class="nav-text">实验准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询地球指向参数"><span class="nav-number">2.1.</span> <span class="nav-text">查询地球指向参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NOVAS程序包下载"><span class="nav-number">2.2.</span> <span class="nav-text">NOVAS程序包下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NOVAS测试使用"><span class="nav-number">2.3.</span> <span class="nav-text">NOVAS测试使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例程序"><span class="nav-number">3.</span> <span class="nav-text">示例程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建立时间参数"><span class="nav-number">3.1.</span> <span class="nav-text">建立时间参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恒星测量"><span class="nav-number">3.2.</span> <span class="nav-text">恒星测量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#月球测量"><span class="nav-number">3.3.</span> <span class="nav-text">月球测量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#地平坐标计算"><span class="nav-number">3.4.</span> <span class="nav-text">地平坐标计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#试验过程"><span class="nav-number">4.</span> <span class="nav-text">试验过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目一"><span class="nav-number">4.1.</span> <span class="nav-text">题目一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题目二"><span class="nav-number">4.2.</span> <span class="nav-text">题目二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">5.</span> <span class="nav-text">实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目一-1"><span class="nav-number">5.1.</span> <span class="nav-text">题目一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题目二-1"><span class="nav-number">5.2.</span> <span class="nav-text">题目二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-f内容"><span class="nav-number">6.</span> <span class="nav-text">sample.f内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#star-f内容-题目一"><span class="nav-number">7.</span> <span class="nav-text">star.f内容[题目一]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#planet-f内容-题目二"><span class="nav-number">8.</span> <span class="nav-text">planet.f内容[题目二]</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="YoungJune"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">YoungJune</p>
+  <div class="site-description" itemprop="description">兴趣使然</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YoungJune</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'HANVnqm3Hk9liaFhlaoVgdkE-gzGzoHsz',
+      appKey     : 'wn5kItrC5xP7AQFywfFKeg60',
+      placeholder: "Say something",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
